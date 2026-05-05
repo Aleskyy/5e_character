@@ -1,0 +1,6 @@
+Add the tool list for proficiencies, type of weapon, theres like 4 so w/e, same for armors
+Remove weapon mastery 2024
+You've put no spell selected, make it so that i can change it ? Like it seems logical, some casters can change daily their spells, some on level up, so there's a need to change spells
+Make it so that we can have the list of known spells, and prepared one, calculated automatically
+Let's improve the top page of the character sheet, even though there's a combat section, i'd like all the base things displayed on top, so HP, AC, Ability scores
+Improve design using skills, make it slick
