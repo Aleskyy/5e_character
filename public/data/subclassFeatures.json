@@ -4,7 +4,7 @@
     "kind": "subclassFeature",
     "name": "Alchemist",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -35,7 +35,7 @@
     "kind": "subclassFeature",
     "name": "Alchemist Spells",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -88,7 +88,7 @@
     "kind": "subclassFeature",
     "name": "Experimental Elixir",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -160,7 +160,7 @@
     "kind": "subclassFeature",
     "name": "Tools of the Trade",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -192,7 +192,7 @@
     "kind": "subclassFeature",
     "name": "Alchemical Savant",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -210,7 +210,7 @@
     "kind": "subclassFeature",
     "name": "Restorative Reagents",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -228,7 +228,7 @@
     "kind": "subclassFeature",
     "name": "Chemical Mastery",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -267,7 +267,7 @@
     "kind": "subclassFeature",
     "name": "Arcane Armor",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -307,7 +307,7 @@
     "kind": "subclassFeature",
     "name": "Armor Model",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -339,7 +339,7 @@
     "kind": "subclassFeature",
     "name": "Armorer",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -374,7 +374,7 @@
     "kind": "subclassFeature",
     "name": "Armorer Spells",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -427,7 +427,7 @@
     "kind": "subclassFeature",
     "name": "Dreadnaught",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -465,7 +465,7 @@
     "kind": "subclassFeature",
     "name": "Guardian",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -497,7 +497,7 @@
     "kind": "subclassFeature",
     "name": "Infiltrator",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -542,7 +542,7 @@
     "kind": "subclassFeature",
     "name": "Tools of the Trade",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -584,7 +584,7 @@
     "kind": "subclassFeature",
     "name": "Extra Attack",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -602,7 +602,7 @@
     "kind": "subclassFeature",
     "name": "Improved Armorer",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -637,7 +637,7 @@
     "kind": "subclassFeature",
     "name": "Perfected Armor",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -680,7 +680,7 @@
     "kind": "subclassFeature",
     "name": "Artillerist",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -711,7 +711,7 @@
     "kind": "subclassFeature",
     "name": "Artillerist Spells",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -764,7 +764,7 @@
     "kind": "subclassFeature",
     "name": "Eldritch Cannon",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -783,7 +783,7 @@
     "kind": "subclassFeature",
     "name": "Tools of the Trade",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -822,7 +822,7 @@
     "kind": "subclassFeature",
     "name": "Arcane Firearm",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -841,7 +841,7 @@
     "kind": "subclassFeature",
     "name": "Explosive Cannon",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -873,7 +873,7 @@
     "kind": "subclassFeature",
     "name": "Fortified Position",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -905,7 +905,7 @@
     "kind": "subclassFeature",
     "name": "Battle Ready",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -937,7 +937,7 @@
     "kind": "subclassFeature",
     "name": "Battle Smith",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -972,7 +972,7 @@
     "kind": "subclassFeature",
     "name": "Battle Smith Spells",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1025,7 +1025,7 @@
     "kind": "subclassFeature",
     "name": "Steel Defender",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1060,7 +1060,7 @@
     "kind": "subclassFeature",
     "name": "Tools of the Trade",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1092,7 +1092,7 @@
     "kind": "subclassFeature",
     "name": "Extra Attack",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1110,7 +1110,7 @@
     "kind": "subclassFeature",
     "name": "Arcane Jolt",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1149,7 +1149,7 @@
     "kind": "subclassFeature",
     "name": "Improved Defender",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1181,7 +1181,7 @@
     "kind": "subclassFeature",
     "name": "Adventurer's Atlas",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1214,7 +1214,7 @@
     "kind": "subclassFeature",
     "name": "Cartographer",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1249,7 +1249,7 @@
     "kind": "subclassFeature",
     "name": "Cartographer Spells",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1302,7 +1302,7 @@
     "kind": "subclassFeature",
     "name": "Mapping Magic",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1334,7 +1334,7 @@
     "kind": "subclassFeature",
     "name": "Tools of the Trade",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1366,7 +1366,7 @@
     "kind": "subclassFeature",
     "name": "Guided Precision",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1385,7 +1385,7 @@
     "kind": "subclassFeature",
     "name": "Ingenious Movement",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -1403,7 +1403,7 @@
     "kind": "subclassFeature",
     "name": "Superior Atlas",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -7953,7 +7953,7 @@
     "kind": "subclassFeature",
     "name": "Ambition Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8016,7 +8016,7 @@
     "kind": "subclassFeature",
     "name": "Warding Flare",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8035,7 +8035,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Invoke Duplicity",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8055,7 +8055,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Cloak of Shadows",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8092,7 +8092,7 @@
     "kind": "subclassFeature",
     "name": "Potent Spellcasting",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8110,7 +8110,7 @@
     "kind": "subclassFeature",
     "name": "Improved Duplicity",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8128,7 +8128,7 @@
     "kind": "subclassFeature",
     "name": "Knowledge Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8157,7 +8157,7 @@
     "kind": "subclassFeature",
     "name": "Solidarity Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8224,7 +8224,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Proficiency",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8242,7 +8242,7 @@
     "kind": "subclassFeature",
     "name": "Solidarity's Action",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8260,7 +8260,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Preserve Life",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8279,7 +8279,7 @@
     "kind": "subclassFeature",
     "name": "Oketra's Blessing",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8316,7 +8316,7 @@
     "kind": "subclassFeature",
     "name": "Divine Strike",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8334,7 +8334,7 @@
     "kind": "subclassFeature",
     "name": "Supreme Healing",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8352,7 +8352,7 @@
     "kind": "subclassFeature",
     "name": "Strength Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8419,7 +8419,7 @@
     "kind": "subclassFeature",
     "name": "Acolyte of Strength",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8437,7 +8437,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Proficiency",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8455,7 +8455,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Feat of Strength",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8473,7 +8473,7 @@
     "kind": "subclassFeature",
     "name": "Rhonas's Blessing",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8510,7 +8510,7 @@
     "kind": "subclassFeature",
     "name": "Divine Strike",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8528,7 +8528,7 @@
     "kind": "subclassFeature",
     "name": "Avatar of Battle",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8546,7 +8546,7 @@
     "kind": "subclassFeature",
     "name": "Zeal Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8613,7 +8613,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Proficiencies",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8631,7 +8631,7 @@
     "kind": "subclassFeature",
     "name": "Priest of Zeal",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8650,7 +8650,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Consuming Fervor",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8669,7 +8669,7 @@
     "kind": "subclassFeature",
     "name": "Resounding Strike",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8706,7 +8706,7 @@
     "kind": "subclassFeature",
     "name": "Divine Strike",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -8724,7 +8724,7 @@
     "kind": "subclassFeature",
     "name": "Blaze of Glory",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "PHB",
@@ -10478,7 +10478,7 @@
     "kind": "subclassFeature",
     "name": "Ambition Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10494,7 +10494,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Invoke Duplicity",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10510,7 +10510,7 @@
     "kind": "subclassFeature",
     "name": "Knowledge Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10526,7 +10526,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Preserve Life",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10542,7 +10542,7 @@
     "kind": "subclassFeature",
     "name": "Solidarity Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10558,7 +10558,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Feat of Strength",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10574,7 +10574,7 @@
     "kind": "subclassFeature",
     "name": "Strength Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10590,7 +10590,7 @@
     "kind": "subclassFeature",
     "name": "Channel Divinity: Consuming Fervor",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -10606,7 +10606,7 @@
     "kind": "subclassFeature",
     "name": "Zeal Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Cleric",
       "classSource": "XPHB",
@@ -19298,7 +19298,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Avatar",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19325,7 +19325,7 @@
     "kind": "subclassFeature",
     "name": "Armor Training",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19343,7 +19343,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Disciplines",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19361,7 +19361,7 @@
     "kind": "subclassFeature",
     "name": "Avatar of Battle",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19379,7 +19379,7 @@
     "kind": "subclassFeature",
     "name": "Avatar of Healing",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19397,7 +19397,7 @@
     "kind": "subclassFeature",
     "name": "Avatar of Speed",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19415,7 +19415,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Awakened",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19442,7 +19442,7 @@
     "kind": "subclassFeature",
     "name": "Awakened Talent",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19460,7 +19460,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Disciplines",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19478,7 +19478,7 @@
     "kind": "subclassFeature",
     "name": "Psionic Investigation",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19499,7 +19499,7 @@
     "kind": "subclassFeature",
     "name": "Psionic Surge",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19518,7 +19518,7 @@
     "kind": "subclassFeature",
     "name": "Spectral Form",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19537,7 +19537,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Immortal",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19564,7 +19564,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Disciplines",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19582,7 +19582,7 @@
     "kind": "subclassFeature",
     "name": "Immortal Durability",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19601,7 +19601,7 @@
     "kind": "subclassFeature",
     "name": "Psionic Resilience",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19619,7 +19619,7 @@
     "kind": "subclassFeature",
     "name": "Surge of Health",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19638,7 +19638,7 @@
     "kind": "subclassFeature",
     "name": "Immortal Will",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19656,7 +19656,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Nomad",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19683,7 +19683,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Disciplines",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19701,7 +19701,7 @@
     "kind": "subclassFeature",
     "name": "Breadth of Knowledge",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19719,7 +19719,7 @@
     "kind": "subclassFeature",
     "name": "Memory of One Thousand Steps",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19737,7 +19737,7 @@
     "kind": "subclassFeature",
     "name": "Superior Teleportation",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19755,7 +19755,7 @@
     "kind": "subclassFeature",
     "name": "Effortless Journey",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19773,7 +19773,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Soul Knife",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19800,7 +19800,7 @@
     "kind": "subclassFeature",
     "name": "Martial Training",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19818,7 +19818,7 @@
     "kind": "subclassFeature",
     "name": "Soul Knife",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19838,7 +19838,7 @@
     "kind": "subclassFeature",
     "name": "Hone the Blade",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19881,7 +19881,7 @@
     "kind": "subclassFeature",
     "name": "Consumptive Knife",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19899,7 +19899,7 @@
     "kind": "subclassFeature",
     "name": "Phantom Knife",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19917,7 +19917,7 @@
     "kind": "subclassFeature",
     "name": "Order of the Wu Jen",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19944,7 +19944,7 @@
     "kind": "subclassFeature",
     "name": "Bonus Disciplines",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19962,7 +19962,7 @@
     "kind": "subclassFeature",
     "name": "Hermit's Study",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19980,7 +19980,7 @@
     "kind": "subclassFeature",
     "name": "Elemental Attunement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -19998,7 +19998,7 @@
     "kind": "subclassFeature",
     "name": "Arcane Dabbler",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -20052,7 +20052,7 @@
     "kind": "subclassFeature",
     "name": "Elemental Mastery",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -29083,7 +29083,7 @@
     "kind": "subclassFeature",
     "name": "Pyromancer (PSK)",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "PHB",
@@ -29105,7 +29105,7 @@
     "kind": "subclassFeature",
     "name": "Heart of Fire",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "PHB",
@@ -29123,7 +29123,7 @@
     "kind": "subclassFeature",
     "name": "Fire in the Veins",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "PHB",
@@ -29141,7 +29141,7 @@
     "kind": "subclassFeature",
     "name": "Pyromancer's Fury",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "PHB",
@@ -29159,7 +29159,7 @@
     "kind": "subclassFeature",
     "name": "Fiery Soul",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "PHB",
@@ -30335,7 +30335,7 @@
     "kind": "subclassFeature",
     "name": "Pyromancer (PSK)",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Sorcerer",
       "classSource": "XPHB",

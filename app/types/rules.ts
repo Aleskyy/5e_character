@@ -1,4 +1,4 @@
-export type SourceType = "core" | "homebrew";
+export type SourceType = "core" | "supplement" | "ua" | "homebrew";
 
 export type RulesKind =
   | "class"
@@ -6,7 +6,8 @@ export type RulesKind =
   | "classFeature"
   | "subclassFeature"
   | "race"
-  | "spell";
+  | "spell"
+  | "condition";
 
 export type RulesEntity<TData = unknown> = {
   id: string;

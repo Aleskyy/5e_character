@@ -10,20 +10,20 @@
     <div class="prof-grid">
       <div>
         <p class="eyebrow">Languages</p>
-        <ChipList
+        <PickList
           :model-value="character.languages ?? []"
-          :suggestions="COMMON_LANGUAGES"
-          placeholder="Add language…"
+          :options="COMMON_LANGUAGES"
+          placeholder="Choose a language…"
           @update:model-value="character.languages = $event"
         />
       </div>
 
       <div>
         <p class="eyebrow">Tools</p>
-        <ChipList
+        <PickList
           :model-value="character.toolProficiencies ?? []"
-          :suggestions="TOOLS"
-          placeholder="Add tool…"
+          :options="TOOLS"
+          placeholder="Choose a tool…"
           @update:model-value="character.toolProficiencies = $event"
         />
       </div>

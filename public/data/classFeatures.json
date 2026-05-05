@@ -4,7 +4,7 @@
     "kind": "classFeature",
     "name": "Spellcasting",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -71,7 +71,7 @@
     "kind": "classFeature",
     "name": "Tinker's Magic",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -128,7 +128,7 @@
     "kind": "classFeature",
     "name": "Replicate Magic Item",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -479,7 +479,7 @@
     "kind": "classFeature",
     "name": "Artificer Subclass",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -495,7 +495,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -511,7 +511,7 @@
     "kind": "classFeature",
     "name": "Subclass feature",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -527,7 +527,7 @@
     "kind": "classFeature",
     "name": "Magic Item Tinker",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -569,7 +569,7 @@
     "kind": "classFeature",
     "name": "Flash of Genius",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -586,7 +586,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -602,7 +602,7 @@
     "kind": "classFeature",
     "name": "Subclass feature",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -618,7 +618,7 @@
     "kind": "classFeature",
     "name": "Magic Item Adept",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -634,7 +634,7 @@
     "kind": "classFeature",
     "name": "Spell-Storing Item",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -652,7 +652,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -668,7 +668,7 @@
     "kind": "classFeature",
     "name": "Advanced Artifice",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -703,7 +703,7 @@
     "kind": "classFeature",
     "name": "Subclass feature",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -719,7 +719,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -735,7 +735,7 @@
     "kind": "classFeature",
     "name": "Magic Item Master",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -751,7 +751,7 @@
     "kind": "classFeature",
     "name": "Epic Boon",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -767,7 +767,7 @@
     "kind": "classFeature",
     "name": "Soul of Artifice",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "className": "Artificer",
       "classSource": "EFA",
@@ -7190,7 +7190,7 @@
     "kind": "classFeature",
     "name": "Mystic Order",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7207,7 +7207,7 @@
     "kind": "classFeature",
     "name": "Psionic Disciplines and Talents",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7224,7 +7224,7 @@
     "kind": "classFeature",
     "name": "Psionics",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7300,7 +7300,7 @@
     "kind": "classFeature",
     "name": "Using a Discipline",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7385,7 +7385,7 @@
     "kind": "classFeature",
     "name": "Mystical Recovery",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7402,7 +7402,7 @@
     "kind": "classFeature",
     "name": "Telepathy",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7418,7 +7418,7 @@
     "kind": "classFeature",
     "name": "Mystic Order feature",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7434,7 +7434,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7450,7 +7450,7 @@
     "kind": "classFeature",
     "name": "Strength of Mind",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7467,7 +7467,7 @@
     "kind": "classFeature",
     "name": "Mystic Order feature",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7483,7 +7483,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7499,7 +7499,7 @@
     "kind": "classFeature",
     "name": "Potent Psionics (1d8)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7516,7 +7516,7 @@
     "kind": "classFeature",
     "name": "Consumptive Power",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7533,7 +7533,7 @@
     "kind": "classFeature",
     "name": "Psionic Mastery (1/Day)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7552,7 +7552,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7568,7 +7568,7 @@
     "kind": "classFeature",
     "name": "Psionic Mastery (2/Day)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7584,7 +7584,7 @@
     "kind": "classFeature",
     "name": "Mystic Order feature",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7600,7 +7600,7 @@
     "kind": "classFeature",
     "name": "Potent Psionics (2d8)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7616,7 +7616,7 @@
     "kind": "classFeature",
     "name": "Psionic Mastery (3/Day)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7632,7 +7632,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7648,7 +7648,7 @@
     "kind": "classFeature",
     "name": "Psionic Mastery (4/Day)",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7664,7 +7664,7 @@
     "kind": "classFeature",
     "name": "Ability Score Improvement",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",
@@ -7680,7 +7680,7 @@
     "kind": "classFeature",
     "name": "Psionic Body",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "className": "Mystic",
       "classSource": "UATheMysticClass",

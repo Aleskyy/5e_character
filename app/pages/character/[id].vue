@@ -8,7 +8,17 @@
 
     <header class="sheet-header">
       <div>
-        <p class="eyebrow">{{ classLabel || "No class" }} · Level {{ character.level }}</p>
+        <p class="eyebrow">
+          {{ classLabel || "No class" }} · Level
+          <input
+            v-model.number="character.level"
+            type="number"
+            min="1"
+            max="20"
+            class="level-input"
+            aria-label="Character level"
+          />
+        </p>
         <h1>{{ character.name || "Unnamed" }}</h1>
         <p class="lede" v-if="raceLabel">{{ raceLabel }}<span v-if="subclassLabel"> · {{ subclassLabel }}</span></p>
       </div>
@@ -48,11 +58,17 @@
         </div>
 
         <div class="hp-controls">
-          <button type="button" @click="adjustHp(-5)">−5</button>
-          <button type="button" @click="adjustHp(-1)">−1</button>
-          <button type="button" @click="adjustHp(1)">+1</button>
-          <button type="button" @click="adjustHp(5)">+5</button>
-          <button type="button" class="ghost-button full-rest" @click="fullRest">Full rest</button>
+          <button type="button" class="hp-dmg" @click="adjustHp(-hpDelta)" :disabled="!hpDelta">− Damage</button>
+          <input
+            v-model.number="hpDelta"
+            type="number"
+            min="0"
+            class="hp-delta"
+            aria-label="HP change amount"
+            placeholder="0"
+          />
+          <button type="button" class="hp-heal" @click="adjustHp(hpDelta)" :disabled="!hpDelta">+ Heal</button>
+          <button type="button" class="ghost-button full-rest" @click="fullRest">Long rest</button>
         </div>
 
         <div class="form-grid hp-grid">
@@ -97,7 +113,19 @@
         </label>
       </div>
     </section>
-    <div id="combat"><CombatPanel :character="character" :hit-die-faces="hitDieFaces" :prof-bonus="profBonus" /></div>
+    <div id="combat">
+      <CombatPanel :character="character" :hit-die-faces="hitDieFaces" :prof-bonus="profBonus" />
+      <button type="button" class="primary-button combat-modal-btn" @click="combatModalOpen = true">⚔ Combat Sheet</button>
+    </div>
+    <CombatModal
+      :open="combatModalOpen"
+      :character="character"
+      :prof-bonus="profBonus"
+      :selected-class="selectedClass"
+      :selected-subclass="selectedSubclass"
+      :spells="spells"
+      @close="combatModalOpen = false"
+    />
 
     <div id="attacks"><AttacksPanel :character="character" :prof-bonus="profBonus" /></div>
 
@@ -312,6 +340,7 @@ const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json",
 const { data: classFeatures } = useFetch<ClassFeature[]>("/data/classFeatures.json", { default: () => [], server: false });
 const { data: subclassFeatures } = useFetch<SubclassFeature[]>("/data/subclassFeatures.json", { default: () => [], server: false });
 
+const combatModalOpen = ref(false);
 const character = ref<CharacterDraft | null>(null);
 const saveStatus = ref("");
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -530,10 +559,13 @@ const hpPct = computed(() => {
   return Math.max(0, Math.min(100, (character.value.currentHp / character.value.maxHp) * 100));
 });
 
+const hpDelta = ref<number>(1);
+
 const adjustHp = (delta: number) => {
-  if (!character.value) return;
+  if (!character.value || !delta) return;
   const next = character.value.currentHp + delta;
   character.value.currentHp = Math.max(0, Math.min(character.value.maxHp, next));
+  hpDelta.value = 0;
 };
 
 const fullRest = () => {
@@ -592,6 +624,27 @@ const deleteCharacter = () => {
 
 .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
+.level-input {
+  width: 3.2em;
+  min-height: auto;
+  padding: 1px 4px;
+  margin-left: 4px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bg-soft);
+  font: inherit;
+  color: inherit;
+  text-align: center;
+}
+.level-input:focus { box-shadow: none; border-color: var(--gilt); }
+
+.combat-modal-btn {
+  width: 100%;
+  margin-top: 12px;
+  font-family: "IM Fell English SC", serif;
+  letter-spacing: 0.16em;
+}
+
 .danger-button {
   min-height: 36px;
   padding: 0 14px;
@@ -644,12 +697,25 @@ const deleteCharacter = () => {
 
 .hp-controls {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 80px 1fr;
   gap: 8px;
   margin-bottom: 14px;
 }
 
 .hp-controls .full-rest { grid-column: 1 / -1; }
+
+.hp-delta {
+  text-align: center;
+  font-family: "IM Fell English", serif;
+  font-size: 1.1rem;
+  padding: 0 4px;
+}
+
+.hp-dmg { color: var(--rubric); border-color: var(--rubric-deep); }
+.hp-dmg:hover:not(:disabled) { background: var(--rubric-deep); color: var(--ink); }
+.hp-heal { color: var(--gilt); border-color: var(--gilt-soft); }
+.hp-heal:hover:not(:disabled) { background: var(--gilt-soft); color: var(--ink); }
+.hp-controls button:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .hp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 

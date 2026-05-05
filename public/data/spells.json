@@ -4,7 +4,7 @@
     "kind": "spell",
     "name": "Air Bubble",
     "source": "AAG",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 22,
       "level": 2,
@@ -104,7 +104,7 @@
     "kind": "spell",
     "name": "Create Spelljamming Helm",
     "source": "AAG",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 22,
       "level": 5,
@@ -171,7 +171,7 @@
     "kind": "spell",
     "name": "Distort Value",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 75,
       "level": 1,
@@ -261,7 +261,7 @@
     "kind": "spell",
     "name": "Fast Friends",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 75,
       "level": 3,
@@ -354,7 +354,7 @@
     "kind": "spell",
     "name": "Gift of Gab",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 76,
       "level": 2,
@@ -428,7 +428,7 @@
     "kind": "spell",
     "name": "Incite Greed",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 76,
       "level": 3,
@@ -515,7 +515,7 @@
     "kind": "spell",
     "name": "Jim's Glowing Coin",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 76,
       "level": 2,
@@ -581,7 +581,7 @@
     "kind": "spell",
     "name": "Jim's Magic Missile",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 76,
       "level": 1,
@@ -663,7 +663,7 @@
     "kind": "spell",
     "name": "Motivational Speech",
     "source": "AI",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 77,
       "level": 3,
@@ -750,7 +750,7 @@
     "kind": "spell",
     "name": "Linked Glyphs",
     "source": "AitFR-AVT",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 9,
       "level": 3,
@@ -865,7 +865,7 @@
     "kind": "spell",
     "name": "Antagonize",
     "source": "BMT",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 50,
       "level": 3,
@@ -967,7 +967,7 @@
     "kind": "spell",
     "name": "Spirit of Death",
     "source": "BMT",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 50,
       "level": 4,
@@ -1065,7 +1065,7 @@
     "kind": "spell",
     "name": "Spray of Cards",
     "source": "BMT",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 50,
       "level": 2,
@@ -1165,7 +1165,7 @@
     "kind": "spell",
     "name": "Homunculus Servant",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 21,
       "level": 2,
@@ -4532,7 +4532,7 @@
     "kind": "spell",
     "name": "Encode Thoughts",
     "source": "GGR",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 47,
       "level": 0,
@@ -4582,7 +4582,7 @@
     "kind": "spell",
     "name": "Create Magen",
     "source": "IDRotF",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 318,
       "level": 7,
@@ -4647,7 +4647,7 @@
     "kind": "spell",
     "name": "Frost Fingers",
     "source": "IDRotF",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 318,
       "level": 1,
@@ -4717,7 +4717,7 @@
     "kind": "spell",
     "name": "Flock of Familiars",
     "source": "LLK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 57,
       "level": 2,
@@ -4796,7 +4796,7 @@
     "kind": "spell",
     "name": "Galder's Speedy Courier",
     "source": "LLK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 57,
       "level": 4,
@@ -4880,7 +4880,7 @@
     "kind": "spell",
     "name": "Galder's Tower",
     "source": "LLK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 57,
       "level": 3,
@@ -31884,7 +31884,7 @@
     "kind": "spell",
     "name": "Gate Seal",
     "source": "SatO",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 12,
       "level": 4,
@@ -31979,7 +31979,7 @@
     "kind": "spell",
     "name": "Warp Sense",
     "source": "SatO",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 12,
       "level": 2,
@@ -32063,7 +32063,7 @@
     "kind": "spell",
     "name": "Borrowed Knowledge",
     "source": "SCC",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 37,
       "level": 2,
@@ -32149,7 +32149,7 @@
     "kind": "spell",
     "name": "Kinetic Jaunt",
     "source": "SCC",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 37,
       "level": 2,
@@ -32241,7 +32241,7 @@
     "kind": "spell",
     "name": "Silvery Barbs",
     "source": "SCC",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 38,
       "level": 1,
@@ -32318,7 +32318,7 @@
     "kind": "spell",
     "name": "Vortex Warp",
     "source": "SCC",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 38,
       "level": 2,
@@ -32402,7 +32402,7 @@
     "kind": "spell",
     "name": "Wither and Bloom",
     "source": "SCC",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "page": 38,
       "level": 2,

@@ -1,6 +1,14 @@
 <template>
   <div class="app-shell">
     <NuxtRouteAnnouncer />
+    <header class="top-nav">
+      <NuxtLink to="/" class="brand">⚔ Character Forge</NuxtLink>
+      <nav class="nav-links">
+        <NuxtLink to="/" class="nav-link">Library</NuxtLink>
+        <NuxtLink to="/encounters" class="nav-link">Encounters</NuxtLink>
+        <NuxtLink to="/homebrew" class="nav-link">Homebrew</NuxtLink>
+      </nav>
+    </header>
     <NuxtPage />
   </div>
 </template>
@@ -240,4 +248,53 @@ html { scroll-behavior: smooth; }
 
 .crumbs a { color: var(--ink-soft); }
 .crumbs .sep { color: var(--gilt-soft); }
+
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(20, 17, 12, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.brand {
+  font-family: "IM Fell English SC", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  color: var(--gilt) !important;
+  text-decoration: none;
+}
+.brand:hover { color: var(--rubric) !important; }
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-family: "IM Fell English SC", serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft) !important;
+  text-decoration: none;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.nav-link:hover { color: var(--ink) !important; border-color: var(--gilt-soft); background: var(--bg-soft); }
+.nav-link.router-link-exact-active {
+  color: var(--gilt) !important;
+  border-color: var(--gilt-soft);
+  background: rgba(201, 161, 85, 0.08);
+}
 </style>

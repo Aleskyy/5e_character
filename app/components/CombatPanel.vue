@@ -65,10 +65,35 @@
       <div class="status-block">
         <p class="eyebrow">Conditions</p>
         <div class="cond-grid">
-          <label v-for="cond in CONDITIONS" :key="cond" class="cond" :class="{ on: character.conditions?.includes(cond) }">
-            <input type="checkbox" :checked="character.conditions?.includes(cond) ?? false" @change="toggleCondition(cond)" />
-            <span>{{ cond }}</span>
-          </label>
+          <div
+            v-for="cond in CONDITIONS"
+            :key="cond"
+            class="cond-wrap"
+            @mouseenter="hoverCond = cond"
+            @mouseleave="hoverCond = hoverCond === cond ? null : hoverCond"
+          >
+            <label class="cond" :class="{ on: character.conditions?.includes(cond) }">
+              <input type="checkbox" :checked="character.conditions?.includes(cond) ?? false" @change="toggleCondition(cond)" />
+              <span>{{ cond }}</span>
+              <button
+                type="button"
+                class="cond-info"
+                aria-label="Show condition info"
+                @click.prevent.stop="pinnedCond = pinnedCond === cond ? null : cond"
+              >?</button>
+            </label>
+            <div
+              v-if="(hoverCond === cond || pinnedCond === cond) && conditionDataFor(cond)"
+              class="cond-tip"
+              @click.stop
+            >
+              <div class="cond-tip-head">
+                <strong>{{ conditionDataFor(cond)!.name }}</strong>
+                <button type="button" class="cond-tip-close" @click="pinnedCond = null">×</button>
+              </div>
+              <RuleEntries :entries="(conditionDataFor(cond)!.data.entries ?? []) as any" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -85,9 +110,21 @@
 
 <script setup lang="ts">
 import type { CharacterDraft, Condition } from "~/types/character";
+import type { RulesEntity } from "~/types/rules";
+import RuleEntries from "~/components/RuleEntries.vue";
 import { abilityModifier } from "~/utils/character";
 import { CONDITIONS } from "~/utils/dnd-constants";
 import { SKILLS } from "~/utils/skills";
+
+type ConditionEntity = RulesEntity<{ page: number | null; entries: unknown[] }>;
+
+const { data: conditionsData } = useFetch<ConditionEntity[]>("/data/conditions.json", { default: () => [], server: false });
+
+const hoverCond = ref<Condition | null>(null);
+const pinnedCond = ref<Condition | null>(null);
+
+const conditionDataFor = (cond: Condition) =>
+  conditionsData.value.find((c) => c.name.toLowerCase() === cond.toLowerCase());
 
 const props = defineProps<{
   character: CharacterDraft;
@@ -266,6 +303,44 @@ const setConcSpell = (name: string) => {
 }
 .cond.on { border-color: var(--rubric); background: rgba(199, 92, 75, 0.1); color: var(--ink); }
 .cond input { width: 14px; min-height: 14px; accent-color: var(--rubric); }
+
+.cond-wrap { position: relative; }
+.cond-info {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  min-height: auto;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: help;
+}
+.cond-info:hover { color: var(--gilt); border-color: var(--gilt); }
+
+.cond-tip {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 10px 12px;
+  border: 1px solid var(--gilt);
+  border-radius: 4px;
+  background: var(--bg-panel-2, var(--bg-soft));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-size: 0.85rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.cond-tip-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.cond-tip-close { background: transparent; border: none; color: var(--ink-faint); font-size: 1.2rem; padding: 0 4px; cursor: pointer; min-height: auto; }
 
 .exh-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .exh-pip {

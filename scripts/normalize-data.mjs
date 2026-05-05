@@ -15,6 +15,13 @@ const slugify = (value) =>
 
 const sourceSlug = (source) => slugify(source || "unknown");
 
+const classifySource = (source) => {
+  const s = String(source || "");
+  if (s.startsWith("UA")) return "ua";
+  if (["DMG", "PHB", "XPHB", "MM", "TCE", "XGE", "FTD", "VRGR", "BGG", "EGW", "SCAG", "DSotDQ", "FRHoF"].includes(s)) return "core";
+  return "supplement";
+};
+
 const entityId = (kind, source, name, extra = []) =>
   [kind, sourceSlug(source), slugify(name), ...extra.map(slugify).filter(Boolean)].join(":");
 
@@ -40,7 +47,7 @@ const normalizeClass = (rawClass) => {
     kind: "class",
     name: rawClass.name,
     source: rawClass.source,
-    sourceType: "core",
+    sourceType: classifySource(rawClass.source),
     data: {
       page: rawClass.page ?? null,
       edition: rawClass.edition ?? "classic",
@@ -52,7 +59,7 @@ const normalizeClass = (rawClass) => {
       cantripProgression: rawClass.cantripProgression ?? [],
       spellsKnownProgression: rawClass.spellsKnownProgression ?? [],
       spellsKnownProgressionFixed: rawClass.spellsKnownProgressionFixed ?? [],
-      spellSlotProgression: spellSlotTable?.rows ?? [],
+      spellSlotProgression: spellSlotTable?.rowsSpellProgression ?? spellSlotTable?.rows ?? [],
       startingProficiencies: rawClass.startingProficiencies ?? {},
       classFeatures: rawClass.classFeatures ?? [],
       multiclassing: rawClass.multiclassing ?? null,
@@ -68,7 +75,7 @@ const normalizeSubclass = (rawSubclass) => ({
   kind: "subclass",
   name: rawSubclass.name,
   source: rawSubclass.source,
-  sourceType: "core",
+  sourceType: classifySource(rawSubclass.source),
   data: {
     shortName: rawSubclass.shortName ?? rawSubclass.name,
     className: rawSubclass.className,
@@ -88,7 +95,7 @@ const normalizeClassFeature = (feature) => ({
   kind: "classFeature",
   name: feature.name,
   source: feature.source,
-  sourceType: "core",
+  sourceType: classifySource(feature.source),
   data: {
     className: feature.className,
     classSource: feature.classSource,
@@ -109,7 +116,7 @@ const normalizeSubclassFeature = (feature) => ({
   kind: "subclassFeature",
   name: feature.name,
   source: feature.source,
-  sourceType: "core",
+  sourceType: classifySource(feature.source),
   data: {
     className: feature.className,
     classSource: feature.classSource,
@@ -121,12 +128,58 @@ const normalizeSubclassFeature = (feature) => ({
   },
 });
 
+const normalizeMonster = (m) => {
+  const acVal = Array.isArray(m.ac) ? (typeof m.ac[0] === "number" ? m.ac[0] : m.ac[0]?.ac ?? null) : (m.ac ?? null);
+  const hpAvg = m.hp?.average ?? null;
+  const hpFormula = m.hp?.formula ?? null;
+  const typeStr = typeof m.type === "string" ? m.type : (m.type?.type ?? "");
+  return {
+    id: entityId("monster", m.source, m.name),
+    kind: "monster",
+    name: m.name,
+    source: m.source,
+    sourceType: classifySource(m.source),
+    data: {
+      page: m.page ?? null,
+      size: m.size ?? [],
+      type: typeStr,
+      ac: acVal,
+      hp: { average: hpAvg, formula: hpFormula },
+      speed: m.speed ?? {},
+      str: m.str ?? 10, dex: m.dex ?? 10, con: m.con ?? 10,
+      int: m.int ?? 10, wis: m.wis ?? 10, cha: m.cha ?? 10,
+      save: m.save ?? {},
+      skill: m.skill ?? {},
+      senses: m.senses ?? [],
+      passive: m.passive ?? null,
+      languages: m.languages ?? [],
+      cr: m.cr ?? null,
+      trait: normalizeEntries(m.trait ?? []),
+      action: normalizeEntries(m.action ?? []),
+      reaction: normalizeEntries(m.reaction ?? []),
+      legendary: normalizeEntries(m.legendary ?? []),
+    },
+  };
+};
+
+const normalizeCondition = (cond) => ({
+  id: entityId("condition", cond.source, cond.name),
+  kind: "condition",
+  name: cond.name,
+  source: cond.source,
+  sourceType: classifySource(cond.source),
+  data: {
+    page: cond.page ?? null,
+    entries: normalizeEntries(cond.entries),
+  },
+});
+
 const normalizeRace = (race) => ({
   id: entityId("race", race.source, race.name),
   kind: "race",
   name: race.name,
   source: race.source,
-  sourceType: "core",
+  sourceType: classifySource(race.source),
   data: {
     page: race.page ?? null,
     size: race.size ?? [],
@@ -144,7 +197,7 @@ const normalizeSpell = (spell, spellSources) => ({
   kind: "spell",
   name: spell.name,
   source: spell.source,
-  sourceType: "core",
+  sourceType: classifySource(spell.source),
   data: {
     page: spell.page ?? null,
     level: spell.level,
@@ -184,6 +237,27 @@ const main = async () => {
     subclassFeatures.push(...(file.subclassFeature ?? []).map(normalizeSubclassFeature));
   }
 
+  const bestiaryIndex = await readJson("bestiary", "index.json");
+  const monsterFiles = await Promise.all(
+    Object.values(bestiaryIndex).map((fileName) => readJson("bestiary", fileName).catch(() => ({ monster: [] }))),
+  );
+  const monsters = monsterFiles
+    .flatMap((file) => file.monster ?? [])
+    .filter((m) => m.name && !m._copy)
+    .map(normalizeMonster);
+
+  const condFile = await readJson("conditionsdiseases.json");
+  const conditionMap = new Map();
+  for (const c of condFile.condition ?? []) {
+    const norm = normalizeCondition(c);
+    const key = c.name.toLowerCase();
+    const existing = conditionMap.get(key);
+    if (!existing || (norm.source === "XPHB" && existing.source !== "XPHB")) {
+      conditionMap.set(key, norm);
+    }
+  }
+  const conditions = [...conditionMap.values()].sort((a, b) => a.name.localeCompare(b.name));
+
   const raceFile = await readJson("races.json");
   const races = (raceFile.race ?? [])
     .filter((race) => !race._copy)
@@ -211,6 +285,8 @@ const main = async () => {
   await writeJson("subclassFeatures.json", subclassFeatures);
   await writeJson("races.json", races);
   await writeJson("spells.json", spells);
+  await writeJson("conditions.json", conditions);
+  await writeJson("monsters.json", monsters);
   await writeJson("sources.json", sources);
 
   console.log(`Normalized ${classes.length} classes`);
@@ -219,6 +295,8 @@ const main = async () => {
   console.log(`Normalized ${subclassFeatures.length} subclass features`);
   console.log(`Normalized ${races.length} races`);
   console.log(`Normalized ${spells.length} spells`);
+  console.log(`Normalized ${conditions.length} conditions`);
+  console.log(`Normalized ${monsters.length} monsters`);
 };
 
 main().catch((error) => {

@@ -52,7 +52,7 @@
           Class
           <select v-model="draft.classId">
             <option value="">Choose a class</option>
-            <option v-for="o in classOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }})</option>
+            <option v-for="o in classOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }}){{ o.sourceType === 'ua' ? ' [UA]' : '' }}</option>
           </select>
         </label>
 
@@ -60,7 +60,7 @@
           Subclass
           <select v-model="draft.subclassId" :disabled="!subclassOptions.length">
             <option value="">Choose a subclass</option>
-            <option v-for="o in subclassOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }})</option>
+            <option v-for="o in subclassOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }}){{ o.sourceType === 'ua' ? ' [UA]' : '' }}</option>
           </select>
         </label>
 
@@ -154,23 +154,31 @@ const { data: races } = useFetch<RulesEntity<RaceData>[]>("/data/races.json", { 
 const { data: subclasses } = useFetch<RulesEntity<SubclassData>[]>("/data/subclasses.json", { default: () => [], server: false });
 const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json", { default: () => [], server: false });
 
+const { spells: hbSpells, races: hbRaces, subraces: hbSubraces, classes: hbClasses, load: loadHomebrew } = useHomebrew();
+onMounted(() => loadHomebrew());
+
 const draft = reactive<CharacterDraft>(createEmptyCharacter());
 const spellSearch = ref("");
 const spellLevelFilter = ref(-1);
 
 onMounted(() => { load(); });
 
-const classOptions = computed(() =>
-  classes.value
+const classOptions = computed(() => [
+  ...hbClasses.value.map((c) => ({ id: c.id, name: c.name, source: "Homebrew", sourceType: "homebrew" as const })),
+  ...classes.value
     .filter((item) => item.data.edition === "classic")
-    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source)),
-);
+    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source))
+    .map((c) => ({ id: c.id, name: c.name, source: c.source, sourceType: c.sourceType })),
+]);
 
-const raceOptions = computed(() =>
-  races.value
+const raceOptions = computed(() => [
+  ...hbRaces.value.map((r) => ({ id: r.id, name: r.name, source: "Homebrew", sourceType: "homebrew" as const })),
+  ...hbSubraces.value.map((r) => ({ id: r.id, name: r.name, source: "Homebrew", sourceType: "homebrew" as const })),
+  ...races.value
     .filter((item) => !item.data.traitTags.includes("NPC Race"))
-    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source)),
-);
+    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source))
+    .map((r) => ({ id: r.id, name: r.name, source: r.source, sourceType: r.sourceType })),
+]);
 
 const selectedClass = computed(() => classes.value.find((item) => item.id === draft.classId));
 const selectedSubclass = computed(() => subclasses.value.find((item) => item.id === draft.subclassId));
@@ -192,11 +200,29 @@ import { spellMatchesClass, subclassAdditionalSpellKeys } from "~/utils/spell-fi
 
 const additionalKeys = computed(() => subclassAdditionalSpellKeys(selectedSubclass.value, spells.value));
 
-const availableSpells = computed(() =>
-  spells.value.filter((s) =>
+const hbSpellsAsRules = computed(() =>
+  hbSpells.value.map((s) => ({
+    id: s.id,
+    kind: "spell" as const,
+    name: s.name,
+    source: "Homebrew",
+    sourceType: "homebrew" as const,
+    data: {
+      page: null, level: s.level, school: s.school ?? "", time: [], range: s.range ?? null,
+      components: s.components, duration: [],
+      entries: [s.description, ...(s.diceCount && s.diceFaces ? [`Dice: ${s.diceCount}d${s.diceFaces}`] : [])],
+      entriesHigherLevel: [], damageInflict: [], savingThrow: [], spellAttack: [],
+      miscTags: [], areaTags: [], classes: [], classVariants: [], subclasses: [],
+    },
+  })),
+);
+
+const availableSpells = computed(() => [
+  ...hbSpellsAsRules.value,
+  ...spells.value.filter((s) =>
     spellMatchesClass(s, selectedClass.value?.name, selectedClass.value?.source, selectedSubclass.value, additionalKeys.value),
   ),
-);
+]);
 
 const visibleSpells = computed(() => {
   const search = spellSearch.value.trim().toLowerCase();

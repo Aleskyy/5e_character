@@ -6,16 +6,17 @@
         <h2>Spellbook</h2>
       </div>
       <div class="counts">
+        <span class="caster-badge" v-if="casterType">{{ casterTypeLabel }}</span>
         <span>Cantrips <strong>{{ knownCantrips.length }}<span v-if="cantripsAllowed">/{{ cantripsAllowed }}</span></strong></span>
-        <span>Known <strong>{{ knownNonCantrips.length }}<span v-if="spellsKnownAllowed">/{{ spellsKnownAllowed }}</span></strong></span>
+        <span v-if="casterType !== 'prepared'">Known <strong>{{ knownNonCantrips.length }}<span v-if="spellsKnownAllowed">/{{ spellsKnownAllowed }}</span></strong></span>
         <span>Prepared <strong>{{ preparedNonCantrips.length }}<span v-if="preparedAllowed">/{{ preparedAllowed }}</span></strong></span>
       </div>
     </div>
 
     <div class="tabs">
       <button type="button" :class="{ active: tab === 'prepared' }" @click="tab = 'prepared'">Prepared ({{ preparedSpells.length }})</button>
-      <button type="button" :class="{ active: tab === 'known' }" @click="tab = 'known'">Known ({{ knownSpells.length }})</button>
-      <button type="button" :class="{ active: tab === 'browse' }" @click="tab = 'browse'">Browse ({{ availableSpells.length }})</button>
+      <button v-if="casterType !== 'prepared'" type="button" :class="{ active: tab === 'known' }" @click="tab = 'known'">Known ({{ knownSpells.length }})</button>
+      <button type="button" :class="{ active: tab === 'browse' }" @click="tab = 'browse'">{{ casterType === 'prepared' ? 'Class List' : 'Browse' }} ({{ availableSpells.length }})</button>
     </div>
 
     <div class="filters" v-if="tab === 'browse'">
@@ -55,8 +56,17 @@
 
     <div v-else-if="tab === 'browse'">
       <ul v-if="visibleAvailable.length" class="spell-rows">
-        <li v-for="spell in visibleAvailable" :key="spell.id" class="spell-row" :class="{ known: isKnown(spell.id) }">
+        <li v-for="spell in visibleAvailable" :key="spell.id" class="spell-row" :class="{ known: isKnown(spell.id), prepared: isPrepared(spell.id) }">
           <button
+            v-if="casterType === 'prepared'"
+            type="button"
+            class="prep-toggle"
+            :class="{ on: isPrepared(spell.id) }"
+            @click="togglePreparedDirect(spell.id, spell.data.level)"
+            :aria-label="isPrepared(spell.id) ? 'Unprepare' : 'Prepare'"
+          >{{ isPrepared(spell.id) ? "●" : "○" }}</button>
+          <button
+            v-else
             type="button"
             class="learn-toggle"
             :class="{ on: isKnown(spell.id) }"
@@ -140,16 +150,51 @@ const spellsKnownAllowed = computed(() => {
   return prog[(props.character.level ?? 1) - 1] ?? 0;
 });
 
+const casterProgression = computed(() => props.selectedClass?.data.casterProgression ?? null);
+
+const casterType = computed<"prepared" | "known" | null>(() => {
+  if (!props.selectedClass) return null;
+  if (props.selectedClass.data.preparedSpellsFormula) return "prepared";
+  const known = props.selectedClass.data.spellsKnownProgression
+    ?? props.selectedClass.data.spellsKnownProgressionFixed;
+  if (known && known.length) return "known";
+  return null;
+});
+
+const casterTypeLabel = computed(() => {
+  const prog = casterProgression.value;
+  const progLabel = prog === "full" ? "Full" : prog === "1/2" ? "Half" : prog === "1/3" ? "1/3" : prog === "pact" ? "Pact" : prog === "artificer" ? "Artificer" : "";
+  const kindLabel = casterType.value === "prepared" ? "prepared" : "known";
+  return [progLabel, "caster", `· ${kindLabel}`].filter(Boolean).join(" ");
+});
+
+const halfCasterLevel = computed(() => {
+  if (casterProgression.value === "1/2") return Math.floor(props.character.level / 2);
+  if (casterProgression.value === "1/3") return Math.floor(props.character.level / 3);
+  return props.character.level;
+});
+
 const preparedAllowed = computed(() => {
   const formula = props.selectedClass?.data.preparedSpellsFormula;
-  if (formula === "<$level$> + <$abil_int_mod$>" || formula === "<$level$> + <$abil_wis_mod$>" || formula === "<$level$> + <$abil_cha_mod$>") {
-    return Math.max(1, props.character.level + props.spellcastingMod);
-  }
-  if (typeof formula === "string" && formula.includes("level")) {
-    return Math.max(1, props.character.level + props.spellcastingMod);
-  }
-  return 0;
+  if (typeof formula !== "string") return 0;
+  const lvl = casterProgression.value === "1/2" || casterProgression.value === "1/3"
+    ? halfCasterLevel.value
+    : props.character.level;
+  return Math.max(1, lvl + props.spellcastingMod);
 });
+
+const togglePreparedDirect = (id: string, level: number) => {
+  if (level === 0) {
+    toggleKnown(id);
+    return;
+  }
+  const known = new Set(props.character.selectedSpellIds);
+  if (!known.has(id)) {
+    known.add(id);
+    props.character.selectedSpellIds = [...known];
+  }
+  togglePrepared(id);
+};
 
 const isKnown = (id: string) => props.character.selectedSpellIds.includes(id);
 const isPrepared = (id: string) => preparedIds.value.has(id);
@@ -187,6 +232,14 @@ const levelLabel = (lvl: number) => (lvl === 0 ? "Cantrip" : `Lv ${lvl}`);
   color: var(--ink-faint);
 }
 .counts strong { color: var(--gilt); margin-left: 4px; font-weight: 400; }
+.caster-badge {
+  padding: 2px 8px;
+  border: 1px solid var(--gilt-soft);
+  border-radius: 999px;
+  background: rgba(201, 161, 85, 0.08);
+  color: var(--gilt);
+  text-transform: capitalize;
+}
 
 .tabs {
   display: flex;

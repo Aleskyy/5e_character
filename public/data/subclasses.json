@@ -244,7 +244,7 @@
     "kind": "subclass",
     "name": "Alchemist",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Alchemist",
       "className": "Artificer",
@@ -305,7 +305,7 @@
     "kind": "subclass",
     "name": "Armorer",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Armorer",
       "className": "Artificer",
@@ -350,7 +350,7 @@
     "kind": "subclass",
     "name": "Artillerist",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Artillerist",
       "className": "Artificer",
@@ -395,7 +395,7 @@
     "kind": "subclass",
     "name": "Battle Smith",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Battle Smith",
       "className": "Artificer",
@@ -440,7 +440,7 @@
     "kind": "subclass",
     "name": "Cartographer",
     "source": "EFA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Cartographer",
       "className": "Artificer",
@@ -2037,7 +2037,7 @@
     "kind": "subclass",
     "name": "Ambition Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Ambition (PSA)",
       "className": "Cleric",
@@ -2084,7 +2084,7 @@
     "kind": "subclass",
     "name": "Ambition Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Ambition (PSA)",
       "className": "Cleric",
@@ -2104,7 +2104,7 @@
     "kind": "subclass",
     "name": "Knowledge Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Knowledge (PSA)",
       "className": "Cleric",
@@ -2151,7 +2151,7 @@
     "kind": "subclass",
     "name": "Knowledge Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Knowledge (PSA)",
       "className": "Cleric",
@@ -2171,7 +2171,7 @@
     "kind": "subclass",
     "name": "Solidarity Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Solidarity (PSA)",
       "className": "Cleric",
@@ -2218,7 +2218,7 @@
     "kind": "subclass",
     "name": "Solidarity Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Solidarity (PSA)",
       "className": "Cleric",
@@ -2238,7 +2238,7 @@
     "kind": "subclass",
     "name": "Strength Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Strength (PSA)",
       "className": "Cleric",
@@ -2294,7 +2294,7 @@
     "kind": "subclass",
     "name": "Strength Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Strength (PSA)",
       "className": "Cleric",
@@ -2314,7 +2314,7 @@
     "kind": "subclass",
     "name": "Zeal Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Zeal (PSA)",
       "className": "Cleric",
@@ -2361,7 +2361,7 @@
     "kind": "subclass",
     "name": "Zeal Domain (PSA)",
     "source": "PSA",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Zeal (PSA)",
       "className": "Cleric",
@@ -4831,7 +4831,7 @@
     "kind": "subclass",
     "name": "Order of the Avatar",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Avatar",
       "className": "Mystic",
@@ -4851,7 +4851,7 @@
     "kind": "subclass",
     "name": "Order of the Awakened",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Awakened",
       "className": "Mystic",
@@ -4871,7 +4871,7 @@
     "kind": "subclass",
     "name": "Order of the Immortal",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Immortal",
       "className": "Mystic",
@@ -4891,7 +4891,7 @@
     "kind": "subclass",
     "name": "Order of the Nomad",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Nomad",
       "className": "Mystic",
@@ -4911,7 +4911,7 @@
     "kind": "subclass",
     "name": "Order of the Soul Knife",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Soul Knife",
       "className": "Mystic",
@@ -4931,7 +4931,7 @@
     "kind": "subclass",
     "name": "Order of the Wu Jen",
     "source": "UATheMysticClass",
-    "sourceType": "core",
+    "sourceType": "ua",
     "data": {
       "shortName": "Wu Jen",
       "className": "Mystic",
@@ -6845,7 +6845,7 @@
     "kind": "subclass",
     "name": "Pyromancer (PSK)",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Pyromancer (PSK)",
       "className": "Sorcerer",
@@ -6865,7 +6865,7 @@
     "kind": "subclass",
     "name": "Pyromancer (PSK)",
     "source": "PSK",
-    "sourceType": "core",
+    "sourceType": "supplement",
     "data": {
       "shortName": "Pyromancer (PSK)",
       "className": "Sorcerer",
