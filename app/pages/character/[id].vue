@@ -23,10 +23,18 @@
         <p class="lede" v-if="raceLabel">{{ raceLabel }}<span v-if="subclassLabel"> · {{ subclassLabel }}</span></p>
       </div>
       <div class="header-actions">
+        <button type="button" class="ghost-button" @click="shareOpen = true">Share / Import</button>
         <button type="button" class="ghost-button" @click="exportCharacter">Export</button>
         <button type="button" class="danger-button" @click="deleteCharacter">Delete</button>
       </div>
     </header>
+
+    <ShareCharacterModal
+      :open="shareOpen"
+      :character="character"
+      @close="shareOpen = false"
+      @import="onShareImport"
+    />
 
 
 
@@ -602,11 +610,20 @@ const exportCharacter = () => {
   URL.revokeObjectURL(url);
 };
 
-const deleteCharacter = () => {
+const { confirm: askConfirm } = useConfirm();
+const deleteCharacter = async () => {
   if (!character.value) return;
-  if (!confirm(`Delete ${character.value.name}? This cannot be undone.`)) return;
+  if (!await askConfirm({ title: `Delete ${character.value.name}?`, message: "This cannot be undone.", confirmLabel: "Delete" })) return;
   remove(character.value.id);
   router.push("/");
+};
+
+const shareOpen = ref(false);
+const onShareImport = async (incoming: CharacterDraft) => {
+  if (!await askConfirm({ title: "Replace character?", message: "Importing will overwrite the current character data.", confirmLabel: "Replace" })) return;
+  const merged = { ...incoming, id: character.value!.id };
+  character.value = merged;
+  shareOpen.value = false;
 };
 </script>
 

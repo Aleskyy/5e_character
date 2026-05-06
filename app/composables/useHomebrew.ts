@@ -1,4 +1,4 @@
-import type { HomebrewEntry, HBSpell, HBRace, HBSubrace, HBClass } from "~/types/homebrew";
+import type { HomebrewEntry, HBSpell, HBRace, HBSubrace, HBClass, HBNpc } from "~/types/homebrew";
 
 const STORAGE_KEY = "character-forge.homebrew.v1";
 
@@ -37,6 +37,7 @@ export const useHomebrew = () => {
   const races = computed<HBRace[]>(() => entries.value.filter((e): e is HBRace => e.kind === "race"));
   const subraces = computed<HBSubrace[]>(() => entries.value.filter((e): e is HBSubrace => e.kind === "subrace"));
   const classes = computed<HBClass[]>(() => entries.value.filter((e): e is HBClass => e.kind === "class"));
+  const npcs = computed<HBNpc[]>(() => entries.value.filter((e): e is HBNpc => e.kind === "npc"));
 
-  return { entries, spells, races, subraces, classes, load, upsert, remove };
+  return { entries, spells, races, subraces, classes, npcs, load, upsert, remove };
 };

@@ -35,6 +35,7 @@
           <option v-for="c in characters" :key="c.id" :value="c.id">{{ c.name }} (Lv {{ c.level }})</option>
         </select>
         <button type="button" class="primary-button" @click="addPc" :disabled="!pcPick">Add</button>
+        <button type="button" class="ghost-button" @click="importOpen = true">Import by code</button>
       </div>
 
       <div v-if="addTab === 'monster'" class="add-body">
@@ -58,8 +59,13 @@
       </div>
 
       <div v-if="addTab === 'npc'" class="add-body">
-        <input v-model="npcName" type="text" placeholder="NPC name" @keydown.enter="addNpc" />
-        <button type="button" class="primary-button" @click="addNpc" :disabled="!npcName.trim()">Add</button>
+        <select v-model="npcPick">
+          <option value="">— Saved NPC (optional) —</option>
+          <option v-for="n in savedNpcs" :key="n.id" :value="n.id">{{ n.name }}{{ n.race ? ` (${n.race})` : "" }}</option>
+        </select>
+        <button type="button" class="primary-button" :disabled="!npcPick" @click="addSavedNpc">Add saved</button>
+        <input v-model="npcName" type="text" placeholder="…or type a name" @keydown.enter="addNpc" />
+        <button type="button" class="primary-button" @click="addNpc" :disabled="!npcName.trim()">Add by name</button>
       </div>
     </section>
 
@@ -84,13 +90,31 @@
           <span class="kind-tag">{{ kindLabel(entry.kind) }}</span>
           <input v-model="entry.name" class="entry-name" />
           <template v-if="entry.kind !== 'npc'">
-            <input type="number" class="hp" v-model.number="entry.currentHp" :placeholder="String(entry.maxHp ?? '')" aria-label="Current HP" />
-            <span class="hp-sep">/</span>
-            <input type="number" class="hp" v-model.number="entry.maxHp" aria-label="Max HP" />
-            <input type="number" class="ac" v-model.number="entry.ac" placeholder="AC" aria-label="AC" />
+            <label class="stat-cell"><span>HP</span>
+              <span class="hp-pair">
+                <input type="number" v-model.number="entry.currentHp" :placeholder="String(entry.maxHp ?? '')" aria-label="Current HP" />
+                <span class="hp-sep">/</span>
+                <input type="number" v-model.number="entry.maxHp" aria-label="Max HP" />
+              </span>
+            </label>
+            <label class="stat-cell"><span>AC</span>
+              <input type="number" v-model.number="entry.ac" aria-label="AC" />
+            </label>
+            <label class="stat-cell"><span>Perc</span>
+              <input type="number" v-model.number="entry.perception" aria-label="Passive Perception" />
+            </label>
+            <label v-if="entry.kind === 'pc'" class="stat-cell"><span>Ins</span>
+              <input type="number" v-model.number="entry.insight" aria-label="Passive Insight" />
+            </label>
           </template>
-          <button v-if="entry.kind === 'pc' && entry.refId" type="button" class="ghost-button small" @click="openCharacter(entry.refId)">Sheet</button>
+          <button type="button" class="ghost-button small" @click="openStatus(entry)">Status</button>
+          <button v-if="entry.kind === 'pc' && entry.refId" type="button" class="ghost-button small" @click="openPcSheet(entry.refId)">Sheet</button>
+          <button v-else-if="entry.kind === 'monster'" type="button" class="ghost-button small" @click="openMonsterSheet(entry)">Sheet</button>
           <button type="button" class="danger-button small" @click="removeEntry(entry.id)">×</button>
+          <div v-if="(entry.conditions?.length || (entry.exhaustion ?? 0) > 0)" class="cond-row">
+            <span v-for="c in entry.conditions ?? []" :key="c" class="cond-tag">{{ c }}</span>
+            <span v-if="(entry.exhaustion ?? 0) > 0" class="cond-tag exh">Exh {{ entry.exhaustion }}</span>
+          </div>
         </li>
       </ul>
       <p v-else class="muted">Empty roster. Add combatants above.</p>
@@ -132,6 +156,41 @@
     </section>
 
     <p class="muted save-status">{{ saveStatus }}</p>
+
+    <ShareCharacterModal
+      :open="importOpen"
+      :character="null"
+      @close="importOpen = false"
+      @import="onImportPc"
+    />
+
+    <StatusModal
+      v-if="statusEntry"
+      :open="!!statusEntry"
+      :name="statusEntry.name"
+      :conditions="statusEntry.conditions ?? []"
+      :exhaustion="statusEntry.exhaustion ?? 0"
+      @close="statusEntry = null"
+      @update="applyStatus"
+    />
+
+    <MonsterSheetModal
+      v-if="monsterSheet"
+      :open="!!monsterSheet"
+      :monster="monsterSheet"
+      @close="monsterSheet = null"
+    />
+
+    <CombatModal
+      v-if="pcSheet"
+      :open="!!pcSheet"
+      :character="pcSheet"
+      :prof-bonus="pcSheetProf"
+      :selected-class="pcSheetClass"
+      :selected-subclass="pcSheetSubclass"
+      :spells="spells ?? []"
+      @close="pcSheetId = null"
+    />
   </main>
 
   <main class="page" v-else>
@@ -143,10 +202,13 @@
 <script setup lang="ts">
 import type { Encounter, EncounterEntry, CustomMonster } from "~/types/encounter";
 import type { CharacterDraft } from "~/types/character";
+import type { ClassData, RulesEntity, SpellData, SubclassData } from "~/types/rules";
+import { abilityModifier, proficiencyBonus } from "~/utils/character";
+import { customMonsterToSheet } from "~/utils/custom-monster-adapter";
 
 type MonsterEntity = {
   id: string; name: string; source: string;
-  data: { ac: number | null; hp: { average: number | null; formula: string | null }; cr: string | null; type: string };
+  data: any;
 };
 
 const ABILITIES = ["str", "dex", "con", "int", "wis", "cha"] as const;
@@ -156,8 +218,12 @@ const router = useRouter();
 const id = computed(() => String(route.params.id));
 
 const { encounters, customMonsters, load, upsert, upsertMonster } = useEncounters();
-const { characters, load: loadChars } = useCharacters();
+const { characters, load: loadChars, save: saveCharacter } = useCharacters();
+const { items: itemLibrary, load: loadItems } = useItemLibrary();
 const { data: monsters } = useFetch<MonsterEntity[]>("/data/monsters.json", { default: () => [], server: false });
+const { data: classes } = useFetch<RulesEntity<ClassData>[]>("/data/classes.json", { default: () => [], server: false });
+const { data: subclasses } = useFetch<RulesEntity<SubclassData>[]>("/data/subclasses.json", { default: () => [], server: false });
+const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json", { default: () => [], server: false });
 
 const encounter = ref<Encounter | null>(null);
 const saveStatus = ref("");
@@ -168,7 +234,7 @@ const hydrate = () => {
   encounter.value = found ? JSON.parse(JSON.stringify(found)) : null;
 };
 
-onMounted(() => { load(); loadChars(); hydrate(); });
+onMounted(() => { load(); loadChars(); loadItems(); loadHomebrew(); hydrate(); });
 watch(() => id.value, hydrate);
 watch(encounters, () => { if (!encounter.value) hydrate(); });
 
@@ -190,6 +256,8 @@ const monsterQty = ref(1);
 const customPick = ref("");
 const customQty = ref(1);
 const npcName = ref("");
+const npcPick = ref("");
+const { npcs: savedNpcs, load: loadHomebrew } = useHomebrew();
 
 const monsterMatches = computed(() => {
   const q = monsterSearch.value.trim().toLowerCase();
@@ -209,12 +277,53 @@ const removeEntry = (eid: string) => {
   encounter.value.entries = encounter.value.entries.filter((e) => e.id !== eid);
 };
 
+const passiveSkill = (ch: CharacterDraft, key: "perception" | "insight") => {
+  const mod = abilityModifier(ch.abilityScores?.wis ?? 10);
+  const isProf = ch.skillProficiencies?.includes(key) ?? false;
+  const isExp = ch.skillExpertise?.includes(key) ?? false;
+  const pb = proficiencyBonus(ch.level || 1);
+  const bonus = isExp ? pb * 2 : isProf ? pb : 0;
+  return 10 + mod + bonus;
+};
+
+const pcAc = (ch: CharacterDraft) => {
+  const equippedBonus = (ch.inventory ?? [])
+    .filter((e) => e.equipped)
+    .map((e) => itemLibrary.value.find((i) => i.id === e.itemId))
+    .reduce((sum, item) => sum + (item?.acBonus ?? 0), 0);
+  const base = ch.armorClass != null ? ch.armorClass : 10 + abilityModifier(ch.abilityScores?.dex ?? 10);
+  return base + equippedBonus;
+};
+
+const monsterAcNumber = (ac: unknown): number | undefined => {
+  if (typeof ac === "number") return ac;
+  if (Array.isArray(ac)) {
+    const first = ac[0];
+    if (typeof first === "number") return first;
+    if (first && typeof first === "object" && typeof (first as any).ac === "number") return (first as any).ac;
+  }
+  return undefined;
+};
+
+const monsterInsight = (data: any): number | undefined => {
+  const wis = data?.wis;
+  if (typeof wis !== "number") return undefined;
+  const mod = Math.floor((wis - 10) / 2);
+  const skill = data?.skill?.insight;
+  if (typeof skill === "string") return 10 + Number.parseInt(skill, 10);
+  return 10 + mod;
+};
+
 const addPc = () => {
   const ch = characters.value.find((c) => c.id === pcPick.value);
   if (!ch) return;
   addEntry({
     id: newEntryId(), kind: "pc", refId: ch.id, name: ch.name || "Unnamed",
-    currentHp: ch.currentHp, maxHp: ch.maxHp, ac: ch.armorClass, initiative: undefined,
+    currentHp: ch.currentHp, maxHp: ch.maxHp, ac: pcAc(ch), initiative: undefined,
+    perception: passiveSkill(ch, "perception"),
+    insight: passiveSkill(ch, "insight"),
+    conditions: [...(ch.conditions ?? [])],
+    exhaustion: ch.exhaustion ?? 0,
   });
   pcPick.value = "";
 };
@@ -227,9 +336,13 @@ const addMonster = () => {
     addEntry({
       id: newEntryId(), kind: "monster", refId: m.id,
       name: qty > 1 ? `${m.name} ${i}` : m.name,
-      currentHp: m.data.hp.average ?? undefined,
-      maxHp: m.data.hp.average ?? undefined,
-      ac: m.data.ac ?? undefined,
+      currentHp: m.data.hp?.average ?? undefined,
+      maxHp: m.data.hp?.average ?? undefined,
+      ac: monsterAcNumber(m.data.ac),
+      perception: typeof m.data.passive === "number" ? m.data.passive : undefined,
+      insight: monsterInsight(m.data),
+      conditions: [],
+      exhaustion: 0,
     });
   }
   monsterPick.value = "";
@@ -244,6 +357,7 @@ const addCustom = () => {
       id: newEntryId(), kind: "monster", refId: m.id,
       name: qty > 1 ? `${m.name} ${i}` : m.name,
       currentHp: m.hp, maxHp: m.hp, ac: m.ac,
+      conditions: [], exhaustion: 0,
     });
   }
   customPick.value = "";
@@ -254,6 +368,13 @@ const addNpc = () => {
   if (!n) return;
   addEntry({ id: newEntryId(), kind: "npc", name: n });
   npcName.value = "";
+};
+
+const addSavedNpc = () => {
+  const npc = savedNpcs.value.find((n) => n.id === npcPick.value);
+  if (!npc) return;
+  addEntry({ id: newEntryId(), kind: "npc", refId: npc.id, name: npc.name, notes: npc.description });
+  npcPick.value = "";
 };
 
 const kindLabel = (k: EncounterEntry["kind"]) => k === "pc" ? "PC" : k === "monster" ? "MON" : "NPC";
@@ -284,6 +405,42 @@ const dragDrop = (i: number) => {
 };
 
 const openCharacter = (cid: string) => router.push(`/character/${cid}`);
+
+const statusEntry = ref<EncounterEntry | null>(null);
+const openStatus = (entry: EncounterEntry) => { statusEntry.value = entry; };
+const applyStatus = (payload: { conditions: string[]; exhaustion: number }) => {
+  if (!encounter.value || !statusEntry.value) return;
+  const target = statusEntry.value.id;
+  encounter.value.entries = encounter.value.entries.map((e) =>
+    e.id === target ? { ...e, conditions: payload.conditions, exhaustion: payload.exhaustion } : e,
+  );
+  statusEntry.value = { ...statusEntry.value, ...payload };
+};
+
+const monsterSheet = ref<MonsterEntity | null>(null);
+const openMonsterSheet = (entry: EncounterEntry) => {
+  if (!entry.refId) return;
+  const official = monsters.value.find((x) => x.id === entry.refId);
+  if (official) { monsterSheet.value = official; return; }
+  const custom = customMonsters.value.find((x) => x.id === entry.refId);
+  if (custom) monsterSheet.value = customMonsterToSheet(custom) as unknown as MonsterEntity;
+};
+
+const pcSheetId = ref<string | null>(null);
+const openPcSheet = (cid: string) => { pcSheetId.value = cid; };
+const pcSheet = computed(() => characters.value.find((c) => c.id === pcSheetId.value) ?? null);
+const pcSheetClass = computed(() => pcSheet.value ? classes.value.find((c) => c.id === pcSheet.value!.classId) : undefined);
+const pcSheetSubclass = computed(() => pcSheet.value ? subclasses.value.find((s) => s.id === pcSheet.value!.subclassId) : undefined);
+const pcSheetProf = computed(() => proficiencyBonus(pcSheet.value?.level ?? 1));
+
+const importOpen = ref(false);
+const onImportPc = (incoming: CharacterDraft) => {
+  const { id: _drop, ...rest } = incoming as CharacterDraft & { id?: string };
+  const saved = saveCharacter(JSON.parse(JSON.stringify(rest)) as CharacterDraft);
+  pcPick.value = saved.id;
+  importOpen.value = false;
+  nextTick(() => addPc());
+};
 
 const entriesWithNotes = computed(() => encounter.value?.entries.filter((e) => e.notes !== undefined && e.notes !== "") ?? []);
 
@@ -326,8 +483,8 @@ const saveCustom = () => {
 
 .roster { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .roster-row {
-  display: grid;
-  grid-template-columns: 22px 56px 50px 1fr 60px 12px 60px 60px auto auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   padding: 8px 12px;
@@ -336,6 +493,16 @@ const saveCustom = () => {
   background: var(--bg-soft);
   cursor: grab;
 }
+.entry-name { flex: 1 1 160px; min-width: 120px; }
+.init { width: 56px; }
+.stat-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.stat-cell > span { font-family: "IM Fell English SC", serif; font-size: 0.62rem; letter-spacing: 0.12em; color: var(--ink-faint); }
+.stat-cell input { width: 60px; text-align: center; padding: 2px 4px; }
+.hp-pair { display: flex; align-items: center; gap: 2px; }
+.hp-pair input { width: 50px; text-align: center; padding: 2px 4px; }
+.cond-row { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; }
+.cond-tag { font-size: 0.72rem; padding: 1px 8px; border: 1px solid var(--rubric); border-radius: 999px; background: rgba(199,92,75,0.1); text-transform: capitalize; }
+.cond-tag.exh { border-color: var(--gilt); color: var(--gilt); background: rgba(201,161,85,0.08); }
 .roster-row:active { cursor: grabbing; }
 .roster-row.kind-pc { border-left: 3px solid var(--gilt); }
 .roster-row.kind-monster { border-left: 3px solid var(--rubric); }

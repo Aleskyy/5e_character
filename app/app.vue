@@ -10,8 +10,22 @@
       </nav>
     </header>
     <NuxtPage />
+    <ConfirmModal
+      :open="confirmState.open"
+      :title="confirmState.title"
+      :message="confirmState.message"
+      :confirm-label="confirmState.confirmLabel"
+      :cancel-label="confirmState.cancelLabel"
+      :tone="confirmState.tone"
+      @confirm="accept"
+      @cancel="dismiss"
+    />
   </div>
 </template>
+
+<script setup lang="ts">
+const { state: confirmState, accept, dismiss } = useConfirm();
+</script>
 
 <style>
 :root {

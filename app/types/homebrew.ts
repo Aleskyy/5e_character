@@ -1,6 +1,6 @@
 import type { Ability } from "~/types/rules";
 
-export type HomebrewKind = "spell" | "race" | "subrace" | "class";
+export type HomebrewKind = "spell" | "race" | "subrace" | "class" | "npc";
 
 export type HBComponents = { v?: boolean; s?: boolean; m?: string | boolean };
 
@@ -18,6 +18,8 @@ export type HBSpell = {
   createdAt: string;
 };
 
+export type HBRaceFeature = { name: string; description: string };
+
 export type HBRace = {
   id: string;
   kind: "race";
@@ -25,6 +27,11 @@ export type HBRace = {
   size?: string;
   speed?: number;
   abilityBonuses?: Partial<Record<Ability, number>>;
+  languages?: string[];
+  darkvision?: number;
+  age?: string;
+  alignment?: string;
+  features?: HBRaceFeature[];
   traits: string;
   createdAt: string;
 };
@@ -35,6 +42,10 @@ export type HBSubrace = {
   name: string;
   parentRaceId: string;
   abilityBonuses?: Partial<Record<Ability, number>>;
+  languages?: string[];
+  darkvision?: number;
+  speed?: number;
+  features?: HBRaceFeature[];
   traits: string;
   createdAt: string;
 };
@@ -52,8 +63,18 @@ export type HBClass = {
   preparedSpellsFormula?: string | null;
   cantripProgression?: number[];
   spellSlotProgression?: number[][];
+  asiLevels?: number[];
   features: HBClassFeature[];
   createdAt: string;
 };
 
-export type HomebrewEntry = HBSpell | HBRace | HBSubrace | HBClass;
+export type HBNpc = {
+  id: string;
+  kind: "npc";
+  name: string;
+  race?: string;
+  description?: string;
+  createdAt: string;
+};
+
+export type HomebrewEntry = HBSpell | HBRace | HBSubrace | HBClass | HBNpc;

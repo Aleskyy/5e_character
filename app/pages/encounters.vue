@@ -46,8 +46,9 @@ const createNew = () => {
   router.push(`/encounter/${id}`);
 };
 
-const confirmDelete = (id: string, name: string) => {
-  if (confirm(`Delete encounter "${name}"?`)) remove(id);
+const { confirm: askConfirm } = useConfirm();
+const confirmDelete = async (id: string, name: string) => {
+  if (await askConfirm({ title: `Delete encounter "${name}"?`, message: "This cannot be undone.", confirmLabel: "Delete" })) remove(id);
 };
 </script>
 
