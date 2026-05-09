@@ -220,7 +220,8 @@ const removeEntry = (id: string) => {
 }
 .inv-controls select { flex: 1; }
 
-.inv-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.inv-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+.inv-list > li { min-width: 0; }
 .inv-children {
   list-style: none;
   margin: 6px 0 0 18px;
@@ -228,6 +229,13 @@ const removeEntry = (id: string) => {
   border-left: 2px solid var(--gilt-soft);
   display: grid;
   gap: 6px;
+  min-width: 0;
+}
+.inv-children > li { min-width: 0; }
+@media (max-width: 520px) {
+  .inv-children { margin-left: 8px; padding-left: 8px; }
+  .inv-controls { flex-wrap: wrap; }
+  .inv-controls select { flex: 1 1 100%; min-width: 0; }
 }
 
 textarea { resize: vertical; font-family: "EB Garamond", serif; }

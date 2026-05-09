@@ -50,6 +50,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKey));
 
 <style scoped>
 .modal-backdrop { position: fixed; inset: 0; z-index: 1100; background: rgba(0,0,0,0.7); display: grid; place-items: center; padding: 16px; }
+@media (max-width: 520px) { .modal-backdrop { padding: 8px; } }
 .modal { width: min(440px, 100%); background: var(--bg-panel-2, var(--bg-soft)); border: 1px solid var(--gilt); border-radius: 6px; box-shadow: 0 12px 40px rgba(0,0,0,0.6); display: grid; }
 .modal-head { padding: 14px 18px 8px; border-bottom: 1px solid var(--line); }
 .modal-head h2 { margin: 0; font-family: "IM Fell English", serif; font-weight: 400; font-size: 1.3rem; }

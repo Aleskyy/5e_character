@@ -53,26 +53,27 @@ const emitUpdate = (patch: Partial<InventoryEntry>) => {
 <style scoped>
 .inv-row {
   display: grid;
-  grid-template-columns: 1fr 60px auto auto auto;
+  grid-template-columns: minmax(0, 1fr) 60px auto auto auto;
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
   border: 1px solid var(--line-soft);
   border-radius: 4px;
   background: var(--bg-soft);
+  min-width: 0;
 }
 
 .inv-row.container { border-color: var(--gilt-soft); background: rgba(201, 161, 85, 0.06); }
 
-.inv-name { font-family: "EB Garamond", serif; }
+.inv-name { font-family: "EB Garamond", serif; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
 .inv-name small { color: var(--ink-faint); font-style: italic; margin-left: 6px; font-size: 0.86rem; }
 
-.qty { min-height: 32px; padding: 4px 6px; text-align: center; }
+.qty { min-height: 32px; padding: 4px 6px; text-align: center; min-width: 0; }
 
 .equip { flex-direction: row; align-items: center; gap: 4px; text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
 .equip input { width: 16px; min-height: 16px; }
 
-.container-select { min-height: 32px; padding: 4px 6px; max-width: 140px; }
+.container-select { min-height: 32px; padding: 4px 6px; max-width: 140px; min-width: 0; }
 
 button.ghost-button {
   width: 30px; height: 30px; min-height: auto; padding: 0;
@@ -80,7 +81,7 @@ button.ghost-button {
 }
 
 @media (max-width: 520px) {
-  .inv-row { grid-template-columns: 1fr auto; }
-  .qty, .equip, .container-select { grid-column: 1 / -1; }
+  .inv-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .qty, .equip, .container-select { grid-column: 1 / -1; max-width: none; width: 100%; }
 }
 </style>

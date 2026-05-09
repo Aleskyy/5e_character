@@ -197,7 +197,8 @@ const downloadBundle = () => {
 
 <style scoped>
 .modal-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.7); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
-.modal { width: min(680px, 100%); max-height: 92vh; overflow-y: auto; background: var(--bg-panel-2, var(--bg-soft)); border: 1px solid var(--gilt); border-radius: 6px; }
+@media (max-width: 520px) { .modal-backdrop { padding: 8px; } }
+.modal { width: min(680px, 100%); max-height: 92dvh; overflow-y: auto; background: var(--bg-panel-2, var(--bg-soft)); border: 1px solid var(--gilt); border-radius: 6px; }
 .modal-head { display: flex; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .modal-close { background: transparent; border: none; color: var(--ink-faint); font-size: 1.5rem; cursor: pointer; }
 .modal-body { padding: 14px 18px; display: grid; gap: 16px; }

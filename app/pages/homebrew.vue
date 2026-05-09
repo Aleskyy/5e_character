@@ -942,16 +942,22 @@ const saveNpc = () => {
 </script>
 
 <style scoped>
-.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-.tabs button { flex: 1; min-height: 38px; background: transparent; border-color: var(--line); color: var(--ink-soft); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tabs button { flex: 1 1 calc(33.333% - 6px); min-width: 90px; min-height: 38px; padding: 0 10px; font-size: 0.78rem; background: transparent; border-color: var(--line); color: var(--ink-soft); }
+@media (min-width: 760px) { .tabs button { flex: 1; font-size: 0.92rem; } }
 .tabs button.active { background: var(--bg-panel-2); border-color: var(--gilt); color: var(--gilt); }
 
 .hb-list { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; }
-.hb-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft); }
-.hb-main { display: grid; gap: 2px; }
-.hb-main strong { font-family: "IM Fell English", serif; font-weight: 400; font-size: 1.1rem; }
-.hb-main small { color: var(--ink-faint); font-style: italic; }
-.hb-actions { display: flex; gap: 6px; }
+.hb-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft); min-width: 0; }
+.hb-main { display: grid; gap: 2px; flex: 1 1 200px; min-width: 0; }
+.hb-main strong { font-family: "IM Fell English", serif; font-weight: 400; font-size: 1.1rem; overflow-wrap: anywhere; word-break: break-word; }
+.hb-main small { color: var(--ink-faint); font-style: italic; overflow-wrap: anywhere; }
+.hb-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+@media (max-width: 520px) {
+  .hb-row { padding: 10px; }
+  .hb-actions { width: 100%; }
+  .hb-actions button { flex: 1 1 0; min-width: 0; padding: 0 8px; font-size: 0.74rem; }
+}
 
 .editor { margin-top: 16px; padding: 16px; border: 1px dashed var(--gilt); border-radius: 4px; background: rgba(201, 161, 85, 0.04); display: grid; gap: 12px; }
 .editor h3 { margin: 0; font-family: "IM Fell English", serif; font-weight: 400; }
@@ -965,7 +971,8 @@ const saveNpc = () => {
 .comp-row .check { display: flex; align-items: center; gap: 6px; grid-template-columns: none; padding: 4px 10px; }
 .comp-mat { flex: 1; min-width: 200px; }
 
-.ability-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.ability-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+@media (min-width: 520px) { .ability-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .ab-bonus { display: grid; gap: 4px; padding: 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft); text-align: center; }
 .ab-bonus span { font-family: "IM Fell English SC", serif; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--gilt); }
 .ab-bonus input { border: none; background: transparent; text-align: center; font-family: "IM Fell English", serif; font-size: 1.1rem; padding: 0; min-height: auto; }

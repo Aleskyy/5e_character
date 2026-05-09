@@ -39,15 +39,28 @@
 
 
     <TopStats :character="character" :prof-bonus="profBonus" :equipped-ac-bonus="equippedAcBonus" />
-
-    <FeaturesSummary
-      :race-features="raceFeatureNames"
-      :class-features-by-level="classFeaturesByLevel as any"
-      :subclass-features-by-level="subclassFeaturesByLevel as any"
+<div class="recap-buttons">
+        <button type="button" class="primary-button" @click="combatModalOpen = true">⚔ Combat Recap</button>
+        <button type="button" class="ghost-button" @click="rpModalOpen = true">✦ RP Recap</button>
+      </div>
+    <CombatModal
+      :open="combatModalOpen"
+      :character="character"
+      :prof-bonus="profBonus"
+      :selected-class="selectedClass"
+      :selected-subclass="selectedSubclass"
+      :spells="spells"
+      @close="combatModalOpen = false"
+    />
+    <RolePlayModal
+      :open="rpModalOpen"
+      :character="character"
+      :race-label="raceLabel"
+      :prof-bonus="profBonus"
+      @close="rpModalOpen = false"
     />
 
-    <InventoryPanel :character="character" />
-    <div id="vitals" class="grid">
+        <div id="vitals" class="grid">
       <section class="panel">
         <div class="section-heading">
           <div>
@@ -89,7 +102,7 @@
       <section class="panel">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Coffer</p>
+            <p class="eyebrow">Coffre</p>
             <h2>Currency</h2>
           </div>
         </div>
@@ -102,6 +115,14 @@
         </div>
       </section>
     </div>
+    <FeaturesSummary
+      :race-features="raceFeatureNames"
+      :class-features-by-level="classFeaturesByLevel as any"
+      :subclass-features-by-level="subclassFeaturesByLevel as any"
+    />
+
+    <InventoryPanel :character="character" />
+
 
         <section id="abilities" class="panel">
       <div class="section-heading">
@@ -123,17 +144,8 @@
     </section>
     <div id="combat">
       <CombatPanel :character="character" :hit-die-faces="hitDieFaces" :prof-bonus="profBonus" />
-      <button type="button" class="primary-button combat-modal-btn" @click="combatModalOpen = true">⚔ Combat Sheet</button>
     </div>
-    <CombatModal
-      :open="combatModalOpen"
-      :character="character"
-      :prof-bonus="profBonus"
-      :selected-class="selectedClass"
-      :selected-subclass="selectedSubclass"
-      :spells="spells"
-      @close="combatModalOpen = false"
-    />
+
 
     <div id="attacks"><AttacksPanel :character="character" :prof-bonus="profBonus" /></div>
 
@@ -349,6 +361,7 @@ const { data: classFeatures } = useFetch<ClassFeature[]>("/data/classFeatures.js
 const { data: subclassFeatures } = useFetch<SubclassFeature[]>("/data/subclassFeatures.json", { default: () => [], server: false });
 
 const combatModalOpen = ref(false);
+const rpModalOpen = ref(false);
 const character = ref<CharacterDraft | null>(null);
 const saveStatus = ref("");
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -662,6 +675,21 @@ const onShareImport = async (incoming: CharacterDraft) => {
   letter-spacing: 0.16em;
 }
 
+.recap-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.recap-buttons button {
+  width: 100%;
+  font-family: "IM Fell English SC", serif;
+  letter-spacing: 0.16em;
+}
+@media (max-width: 480px) {
+  .recap-buttons { grid-template-columns: 1fr; }
+}
+
 .danger-button {
   min-height: 36px;
   padding: 0 14px;
@@ -782,9 +810,9 @@ const onShareImport = async (incoming: CharacterDraft) => {
 
 .slot-row {
   display: grid;
-  grid-template-columns: 40px 1fr auto;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -959,14 +987,15 @@ textarea {
 
 .skill-row {
   display: grid;
-  grid-template-columns: 32px 1fr 44px 50px;
+  grid-template-columns: 32px minmax(0, 1fr) 40px 44px;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 8px;
+  padding: 8px 10px;
   border: 1px solid var(--line-soft);
   border-radius: 4px;
   background: var(--bg-soft);
 }
+.skill-row .skill-name { min-width: 0; overflow-wrap: anywhere; }
 
 .prof-toggle {
   width: 28px;

@@ -136,6 +136,10 @@ label {
   margin: 0 auto;
   padding: 28px 18px 80px;
 }
+@media (max-width: 480px) {
+  .page { padding: 16px 12px 64px; }
+  .panel { padding: 14px 12px; }
+}
 
 .hero {
   padding: 18px 0 14px;
@@ -276,6 +280,24 @@ html { scroll-behavior: smooth; }
   background: rgba(20, 17, 12, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+}
+@media (max-width: 600px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+  .brand { text-align: center; font-size: 0.85rem; letter-spacing: 0.16em; }
+  .nav-links { width: 100%; gap: 4px; flex-wrap: nowrap; }
+  .nav-link {
+    flex: 1;
+    text-align: center;
+    padding: 6px 4px;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    border-color: var(--line);
+  }
 }
 
 .brand {

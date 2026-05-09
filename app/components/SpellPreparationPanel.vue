@@ -275,15 +275,16 @@ const levelLabel = (lvl: number) => (lvl === 0 ? "Cantrip" : `Lv ${lvl}`);
 
 .spell-row {
   display: grid;
-  grid-template-columns: 32px 1fr auto auto;
+  grid-template-columns: 32px minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 8px;
+  padding: 8px 10px;
   border: 1px solid var(--line);
   border-radius: 4px;
   background: var(--bg-soft);
   font-family: "EB Garamond", serif;
 }
+.spell-row .sp-name { min-width: 0; overflow-wrap: anywhere; }
 .spell-row.prepared { border-color: var(--gilt-soft); background: rgba(201, 161, 85, 0.06); }
 .spell-row.known { border-color: var(--moss); }
 

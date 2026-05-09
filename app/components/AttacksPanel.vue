@@ -95,22 +95,26 @@ const attacks = computed(() => {
 .atk-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .atk-row {
   display: grid;
-  grid-template-columns: 1fr 70px 1fr;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 4px;
   background: var(--bg-soft);
   font-family: "EB Garamond", serif;
 }
-.atk-name { font-size: 1.05rem; }
+@media (min-width: 520px) {
+  .atk-row { grid-template-columns: 1fr 70px 1fr; gap: 12px; }
+}
+.atk-name { font-size: 1.05rem; min-width: 0; overflow-wrap: anywhere; }
 .atk-bonus {
   text-align: center;
   font-family: "IM Fell English", serif;
   font-size: 1.2rem;
   color: var(--gilt);
+  min-width: 48px;
 }
-.atk-damage { text-align: right; }
+.atk-damage { text-align: right; white-space: nowrap; }
 .atk-damage small { color: var(--ink-faint); font-style: italic; }
 </style>

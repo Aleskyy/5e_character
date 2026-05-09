@@ -227,9 +227,10 @@ const attacks = computed(() => {
   padding: 16px;
   overflow-y: auto;
 }
+@media (max-width: 520px) { .modal-backdrop { padding: 8px; } }
 .modal {
   width: min(720px, 100%);
-  max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   background: var(--bg-panel-2, var(--bg-soft));
   border: 1px solid var(--gilt);

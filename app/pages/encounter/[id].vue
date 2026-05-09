@@ -85,11 +85,19 @@
           @dragover.prevent
           @drop="dragDrop(idx)"
         >
-          <span class="drag">⋮⋮</span>
-          <input type="number" class="init" v-model.number="entry.initiative" placeholder="—" aria-label="Initiative" />
-          <span class="kind-tag">{{ kindLabel(entry.kind) }}</span>
-          <input v-model="entry.name" class="entry-name" />
-          <template v-if="entry.kind !== 'npc'">
+          <div class="row-head">
+            <span class="drag">⋮⋮</span>
+            <input type="number" class="init" v-model.number="entry.initiative" placeholder="—" aria-label="Initiative" />
+            <span class="kind-tag">{{ kindLabel(entry.kind) }}</span>
+            <input v-model="entry.name" class="entry-name" />
+            <div class="row-actions">
+              <button type="button" class="ghost-button small" @click="openStatus(entry)">Status</button>
+              <button v-if="entry.kind === 'pc' && entry.refId" type="button" class="ghost-button small" @click="openPcSheet(entry.refId)">Sheet</button>
+              <button v-else-if="entry.kind === 'monster'" type="button" class="ghost-button small" @click="openMonsterSheet(entry)">Sheet</button>
+              <button type="button" class="danger-button small" @click="removeEntry(entry.id)">×</button>
+            </div>
+          </div>
+          <div v-if="entry.kind !== 'npc'" class="row-stats">
             <label class="stat-cell"><span>HP</span>
               <span class="hp-pair">
                 <input type="number" v-model.number="entry.currentHp" :placeholder="String(entry.maxHp ?? '')" aria-label="Current HP" />
@@ -106,11 +114,7 @@
             <label v-if="entry.kind === 'pc'" class="stat-cell"><span>Ins</span>
               <input type="number" v-model.number="entry.insight" aria-label="Passive Insight" />
             </label>
-          </template>
-          <button type="button" class="ghost-button small" @click="openStatus(entry)">Status</button>
-          <button v-if="entry.kind === 'pc' && entry.refId" type="button" class="ghost-button small" @click="openPcSheet(entry.refId)">Sheet</button>
-          <button v-else-if="entry.kind === 'monster'" type="button" class="ghost-button small" @click="openMonsterSheet(entry)">Sheet</button>
-          <button type="button" class="danger-button small" @click="removeEntry(entry.id)">×</button>
+          </div>
           <div v-if="(entry.conditions?.length || (entry.exhaustion ?? 0) > 0)" class="cond-row">
             <span v-for="c in entry.conditions ?? []" :key="c" class="cond-tag">{{ c }}</span>
             <span v-if="(entry.exhaustion ?? 0) > 0" class="cond-tag exh">Exh {{ entry.exhaustion }}</span>
@@ -477,30 +481,43 @@ const saveCustom = () => {
 .add-tabs button.active { background: var(--bg-panel-2); border-color: var(--gilt); color: var(--gilt); }
 
 .add-body { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.add-body select, .add-body input[type=text], .add-body input[type=search] { flex: 1; min-width: 160px; }
+.add-body select, .add-body input[type=text], .add-body input[type=search] { flex: 1 1 100%; min-width: 0; }
+@media (min-width: 520px) { .add-body select, .add-body input[type=text], .add-body input[type=search] { flex: 1; min-width: 160px; } }
 .qty { display: flex; align-items: center; gap: 4px; font-family: "IM Fell English SC", serif; }
 .qty input { width: 60px; }
 
 .roster { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .roster-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid var(--line);
   border-radius: 4px;
   background: var(--bg-soft);
   cursor: grab;
+  min-width: 0;
 }
-.entry-name { flex: 1 1 160px; min-width: 120px; }
-.init { width: 56px; }
-.stat-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.row-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 6px; }
+.row-actions { display: flex; flex-wrap: nowrap; gap: 4px; margin-left: auto; }
+.entry-name { flex: 1 1 80px; min-width: 0; }
+@media (max-width: 520px) {
+  .roster-row { padding: 8px 10px; gap: 6px; }
+  .row-head { gap: 6px; flex-wrap: nowrap; }
+  .row-head .drag, .row-head .kind-tag { display: none; }
+  .init { width: 40px; min-height: 32px; padding: 2px 4px; font-size: 0.9rem; }
+  .entry-name { flex: 1 1 0; min-width: 0; font-size: 0.88rem; padding: 4px 4px; min-height: 32px; }
+  .row-actions { gap: 3px; flex-shrink: 0; }
+  .row-actions .small { min-height: 30px; padding: 0 6px; font-size: 0.66rem; letter-spacing: 0.04em; }
+  .row-actions .danger-button.small { padding: 0 6px; }
+}
+.init { width: 56px; flex: 0 0 auto; }
+.stat-cell { display: grid; gap: 2px; align-items: center; justify-items: center; padding: 4px; border: 1px solid var(--line-soft); border-radius: 3px; background: var(--bg); min-width: 0; }
 .stat-cell > span { font-family: "IM Fell English SC", serif; font-size: 0.62rem; letter-spacing: 0.12em; color: var(--ink-faint); }
-.stat-cell input { width: 60px; text-align: center; padding: 2px 4px; }
-.hp-pair { display: flex; align-items: center; gap: 2px; }
-.hp-pair input { width: 50px; text-align: center; padding: 2px 4px; }
-.cond-row { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; }
+.stat-cell input { width: 100%; max-width: 70px; text-align: center; padding: 2px 4px; min-height: 30px; }
+.hp-pair { display: flex; align-items: center; gap: 2px; width: 100%; justify-content: center; }
+.hp-pair input { width: 100%; max-width: 44px; text-align: center; padding: 2px 4px; min-height: 30px; }
+.cond-row { display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; }
 .cond-tag { font-size: 0.72rem; padding: 1px 8px; border: 1px solid var(--rubric); border-radius: 999px; background: rgba(199,92,75,0.1); text-transform: capitalize; }
 .cond-tag.exh { border-color: var(--gilt); color: var(--gilt); background: rgba(201,161,85,0.08); }
 .roster-row:active { cursor: grabbing; }
@@ -525,7 +542,8 @@ const saveCustom = () => {
 @media (min-width: 520px) { .form-grid.two { grid-template-columns: 1fr 1fr 1fr; } }
 .full { display: grid; }
 
-.ability-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 8px 0; }
+.ability-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 8px 0; }
+@media (min-width: 520px) { .ability-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .ab-bonus { display: grid; gap: 4px; padding: 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft); text-align: center; }
 .ab-bonus span { font-family: "IM Fell English SC", serif; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--gilt); }
 .ab-bonus input { border: none; background: transparent; text-align: center; font-family: "IM Fell English", serif; font-size: 1.1rem; padding: 0; min-height: auto; }

@@ -155,7 +155,8 @@ const groups = computed(() => [
 
 <style scoped>
 .modal-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.7); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
-.modal { width: min(720px, 100%); max-height: 90vh; overflow-y: auto; background: var(--bg-panel-2, var(--bg-soft)); border: 1px solid var(--gilt); border-radius: 6px; }
+@media (max-width: 520px) { .modal-backdrop { padding: 8px; } }
+.modal { width: min(720px, 100%); max-height: 90dvh; overflow-y: auto; background: var(--bg-panel-2, var(--bg-soft)); border: 1px solid var(--gilt); border-radius: 6px; }
 .modal-head { display: flex; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .modal-close { background: transparent; border: none; color: var(--ink-faint); font-size: 1.5rem; cursor: pointer; }
 .small { font-size: 0.82rem; }
@@ -164,7 +165,8 @@ const groups = computed(() => [
 .kv > div { padding: 6px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-soft); }
 .kv dt { font-family: "IM Fell English SC", serif; font-size: 0.7rem; letter-spacing: 0.14em; color: var(--gilt); }
 .kv dd { margin: 2px 0 0; font-family: "IM Fell English", serif; }
-.ab-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.ab-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+@media (min-width: 520px) { .ab-row { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .ab-row li { padding: 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-soft); display: grid; gap: 2px; text-align: center; }
 .ab-row span { font-family: "IM Fell English SC", serif; font-size: 0.7rem; color: var(--gilt); }
 .ab-row strong { font-family: "IM Fell English", serif; font-weight: 400; font-size: 1.1rem; }
