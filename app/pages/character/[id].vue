@@ -7,7 +7,11 @@
     </nav>
 
     <header class="sheet-header">
-      <div>
+      <button type="button" class="char-avatar" :class="{ empty: !character.imageUrl }" @click="imageModalOpen = true" aria-label="Edit character image">
+        <img v-if="character.imageUrl" :src="character.imageUrl" alt="" />
+        <span v-else>＋</span>
+      </button>
+      <div class="header-id">
         <p class="eyebrow">
           {{ classLabel || "No class" }} · Level
           <input
@@ -24,7 +28,6 @@
       </div>
       <div class="header-actions">
         <button type="button" class="ghost-button" @click="shareOpen = true">Share / Import</button>
-        <button type="button" class="ghost-button" @click="exportCharacter">Export</button>
         <button type="button" class="danger-button" @click="deleteCharacter">Delete</button>
       </div>
     </header>
@@ -34,6 +37,12 @@
       :character="character"
       @close="shareOpen = false"
       @import="onShareImport"
+    />
+    <CharacterImageModal
+      :open="imageModalOpen"
+      :model-value="character.imageUrl"
+      @close="imageModalOpen = false"
+      @update="(v) => character && (character.imageUrl = v)"
     />
 
 
@@ -362,6 +371,7 @@ const { data: subclassFeatures } = useFetch<SubclassFeature[]>("/data/subclassFe
 
 const combatModalOpen = ref(false);
 const rpModalOpen = ref(false);
+const imageModalOpen = ref(false);
 const character = ref<CharacterDraft | null>(null);
 const saveStatus = ref("");
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -653,6 +663,25 @@ const onShareImport = async (incoming: CharacterDraft) => {
 }
 
 .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.header-id { flex: 1 1 240px; min-width: 0; }
+.char-avatar {
+  flex: 0 0 auto;
+  width: 96px; height: 96px;
+  padding: 0; min-height: auto;
+  border: 1px solid var(--gilt-soft);
+  border-radius: 6px;
+  background: var(--bg-soft);
+  overflow: hidden;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: border-color 160ms ease;
+}
+.char-avatar:hover { border-color: var(--gilt); }
+.char-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.char-avatar.empty span { font-family: "IM Fell English", serif; font-size: 1.8rem; color: var(--ink-faint); }
+@media (max-width: 480px) {
+  .char-avatar { width: 72px; height: 72px; }
+}
 
 .level-input {
   width: 3.2em;

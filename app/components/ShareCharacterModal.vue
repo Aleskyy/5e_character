@@ -12,6 +12,9 @@
         <div class="modal-body">
           <div v-if="character" class="block">
             <p class="eyebrow">Compact Code <small class="muted">({{ code.length }} chars)</small></p>
+            <label v-if="hasImage" class="opt">
+              <input type="checkbox" v-model="omitImage" /> Omit image (smaller code)
+            </label>
             <textarea readonly :value="code" class="code-area" rows="5" @click="selectAll($event)"></textarea>
             <div class="row">
               <button type="button" class="ghost-button" @click="copy(code)">Copy code</button>
@@ -53,8 +56,20 @@ const json = ref("");
 const importInput = ref("");
 const status = ref("");
 const busy = ref(false);
+const omitImage = ref(false);
 
-watch(() => [props.open, props.character] as const, async ([open, ch]) => {
+const hasImage = computed(() => !!props.character?.imageUrl);
+
+const payloadCharacter = computed<CharacterDraft | null>(() => {
+  if (!props.character) return null;
+  if (omitImage.value && props.character.imageUrl) {
+    const { imageUrl: _drop, ...rest } = props.character;
+    return rest as CharacterDraft;
+  }
+  return props.character;
+});
+
+watch(() => [props.open, payloadCharacter.value] as const, async ([open, ch]) => {
   if (!open || !ch) { code.value = ""; json.value = ""; return; }
   json.value = JSON.stringify(ch, null, 2);
   try { code.value = await encodeShareCode(ch); }
@@ -70,12 +85,13 @@ const copy = async (txt: string) => {
 };
 
 const downloadJson = () => {
-  if (!props.character) return;
+  const ch = payloadCharacter.value;
+  if (!ch) return;
   const blob = new Blob([json.value], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${props.character.name || "character"}.json`;
+  link.download = `${ch.name || "character"}.json`;
   link.click();
   URL.revokeObjectURL(url);
 };
@@ -108,4 +124,6 @@ const doImport = async () => {
 .code-area { width: 100%; font-family: monospace; font-size: 0.78rem; word-break: break-all; resize: vertical; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .muted { font-size: 0.78rem; }
+.opt { display: flex; flex-direction: row; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: 0.82rem; color: var(--ink-soft); }
+.opt input { width: 16px; min-height: 16px; margin: 0; }
 </style>

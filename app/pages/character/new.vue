@@ -17,6 +17,14 @@
         <div><p class="eyebrow">Identity</p><h2>Core choices</h2></div>
       </div>
 
+      <div class="identity-row">
+        <button type="button" class="char-avatar" :class="{ empty: !draft.imageUrl }" @click="imageModalOpen = true" aria-label="Edit character image">
+          <img v-if="draft.imageUrl" :src="draft.imageUrl" alt="" />
+          <span v-else>＋</span>
+        </button>
+        <p class="muted small">Click to add an image (URL or upload).</p>
+      </div>
+
       <div class="form-grid">
         <label>Name <input v-model="draft.name" type="text" autocomplete="off" /></label>
         <label>Level <input v-model.number="draft.level" type="number" min="1" max="20" /></label>
@@ -47,6 +55,13 @@
 
       <button type="button" class="primary-button save-button" @click="saveCharacter">Save character</button>
     </section>
+
+    <CharacterImageModal
+      :open="imageModalOpen"
+      :model-value="draft.imageUrl"
+      @close="imageModalOpen = false"
+      @update="(v) => (draft.imageUrl = v)"
+    />
 
     <section class="panel">
       <div class="section-heading">
@@ -113,6 +128,7 @@ const { spells: hbSpells, races: hbRaces, subraces: hbSubraces, classes: hbClass
 onMounted(() => loadHomebrew());
 
 const draft = reactive<CharacterDraft>(createEmptyCharacter());
+const imageModalOpen = ref(false);
 const spellSearch = ref("");
 const spellLevelFilter = ref(-1);
 
@@ -226,6 +242,24 @@ watch(selectedSubclass, () => {
 
 <style scoped>
 .save-button { width: 100%; margin-top: 16px; }
+
+.identity-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; flex-wrap: wrap; }
+.identity-row .muted { margin: 0; }
+.identity-row .small { font-size: 0.82rem; }
+.char-avatar {
+  flex: 0 0 auto;
+  width: 96px; height: 96px;
+  padding: 0; min-height: auto;
+  border: 1px solid var(--gilt-soft);
+  border-radius: 6px;
+  background: var(--bg-soft);
+  overflow: hidden;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.char-avatar:hover { border-color: var(--gilt); }
+.char-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.char-avatar.empty span { font-family: "IM Fell English", serif; font-size: 1.8rem; color: var(--ink-faint); }
 
 .ability-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .ability-card { display: grid; gap: 6px; padding: 12px 8px 10px; text-align: center; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-panel-2); font-family: "IM Fell English SC", serif; letter-spacing: 0.14em; text-transform: uppercase; }

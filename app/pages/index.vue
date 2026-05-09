@@ -26,6 +26,9 @@
           :to="`/character/${character.id}`"
           class="character-row"
         >
+          <span class="char-thumb" :class="{ empty: !character.imageUrl }">
+            <img v-if="character.imageUrl" :src="character.imageUrl" alt="" />
+          </span>
           <span class="char-name">{{ character.name || "Unnamed" }}</span>
           <span class="char-meta">
             <small>Lvl {{ character.level }}</small>
@@ -140,14 +143,25 @@ const formatWhen = (iso: string) => {
 
 .character-list { display: grid; gap: 8px; }
 .character-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  padding: 14px 16px; border: 1px solid var(--line); border-radius: 4px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px;
   background: var(--bg-soft); color: var(--ink); text-decoration: none;
   transition: border-color 160ms ease, background 160ms ease;
 }
 .character-row:hover { border-color: var(--gilt); background: var(--bg-panel-2); color: var(--ink); }
-.char-name { font-family: "IM Fell English", serif; font-size: 1.15rem; }
-.char-meta { display: flex; gap: 14px; color: var(--ink-faint); font-style: italic; }
+.char-thumb {
+  flex: 0 0 auto;
+  width: 48px; height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  overflow: hidden;
+  display: grid; place-items: center;
+}
+.char-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.char-thumb.empty::before { content: "✦"; color: var(--ink-faint); font-family: "IM Fell English", serif; font-size: 1.2rem; }
+.char-name { font-family: "IM Fell English", serif; font-size: 1.15rem; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.char-meta { display: flex; gap: 14px; color: var(--ink-faint); font-style: italic; flex-wrap: wrap; justify-content: flex-end; }
 
 .recent-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .recent-row {

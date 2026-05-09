@@ -43,6 +43,7 @@ export type CharacterDraft = {
   id: string;
   version: number;
   name: string;
+  imageUrl?: string;
   level: number;
   classId: string;
   subclassId: string;
