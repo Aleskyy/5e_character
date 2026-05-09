@@ -7,6 +7,7 @@
         <NuxtLink to="/" class="nav-link">Library</NuxtLink>
         <NuxtLink to="/encounters" class="nav-link">Encounters</NuxtLink>
         <NuxtLink to="/homebrew" class="nav-link">Homebrew</NuxtLink>
+        <NuxtLink to="/install" class="nav-link">Install</NuxtLink>
       </nav>
     </header>
     <NuxtPage />
