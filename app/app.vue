@@ -10,6 +10,13 @@
       </nav>
     </header>
     <NuxtPage />
+    <footer class="site-foot">
+      <span>Character Forge · unofficial fan tool</span>
+      <span class="sep">·</span>
+      <NuxtLink to="/legal">Legal &amp; attribution</NuxtLink>
+      <span class="sep">·</span>
+      <span>Local-only · no tracking</span>
+    </footer>
     <ConfirmModal
       :open="confirmState.open"
       :title="confirmState.title"
@@ -112,6 +119,9 @@ label {
 
 .app-shell {
   min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(ellipse at 20% 0%, rgba(201, 161, 85, 0.08), transparent 60%),
     radial-gradient(ellipse at 80% 100%, rgba(199, 92, 75, 0.06), transparent 55%),
@@ -135,6 +145,7 @@ label {
   width: min(100%, 920px);
   margin: 0 auto;
   padding: 28px 18px 80px;
+  flex: 1 0 auto;
 }
 @media (max-width: 480px) {
   .page { padding: 16px 12px 64px; }
@@ -332,5 +343,27 @@ html { scroll-behavior: smooth; }
   color: var(--gilt) !important;
   border-color: var(--gilt-soft);
   background: rgba(201, 161, 85, 0.08);
+}
+
+.site-foot {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  margin-top: auto;
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-faint);
+  font-family: "IM Fell English SC", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.site-foot a { color: var(--ink-soft); }
+.site-foot a:hover { color: var(--gilt); }
+.site-foot .sep { color: var(--gilt-soft); }
+@media (max-width: 480px) {
+  .site-foot { font-size: 0.66rem; gap: 6px; padding: 14px 10px 22px; }
 }
 </style>
