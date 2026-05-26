@@ -157,6 +157,7 @@
         </label>
       </div>
     </section>
+    <div id="feats"><FeatsPanel :character="character" :feats="feats ?? []" /></div>
     <div id="combat">
       <CombatPanel :character="character" :hit-dice-label="sheetHitDiceLabel" :total-level="totalChrLevel" :prof-bonus="profBonus" />
     </div>
@@ -357,7 +358,7 @@
 
 <script setup lang="ts">
 import type { CharacterDraft } from "~/types/character";
-import type { Ability, ClassData, RaceData, RulesEntity, SpellData, SubclassData } from "~/types/rules";
+import type { Ability, ClassData, FeatData, RaceData, RulesEntity, SpellData, SubclassData } from "~/types/rules";
 import {
   abilities,
   abilityModifier,
@@ -394,6 +395,7 @@ const { data: classes } = useFetch<RulesEntity<ClassData>[]>("/data/classes.json
 const { data: races } = useFetch<RulesEntity<RaceData>[]>("/data/races.json", { default: () => [], server: false });
 const { data: subclasses } = useFetch<RulesEntity<SubclassData>[]>("/data/subclasses.json", { default: () => [], server: false });
 const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json", { default: () => [], server: false });
+const { data: feats } = useFetch<RulesEntity<FeatData>[]>("/data/feats.json", { default: () => [], server: false });
 const { data: classFeatures } = useFetch<ClassFeature[]>("/data/classFeatures.json", { default: () => [], server: false });
 const { data: subclassFeatures } = useFetch<SubclassFeature[]>("/data/subclassFeatures.json", { default: () => [], server: false });
 
@@ -591,6 +593,7 @@ const navLinks = computed(() => {
   if (resourcesAvailable.value) links.push({ id: "resources", label: "Resources" });
   if (spellSlotsAvailable.value) links.push({ id: "slots", label: "Spell Slots" });
   links.push({ id: "abilities", label: "Abilities" });
+  links.push({ id: "feats", label: "Feats" });
   if (hasCasting.value) links.push({ id: "casting", label: "Spellcasting" });
   links.push({ id: "skills", label: "Skills" });
   if (anyEquippedWeapon.value) links.push({ id: "attacks", label: "Attacks" });
@@ -717,6 +720,9 @@ const exportPdf = async () => {
       ...classFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
       ...subclassFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
     ];
+    const featNames = (character.value.featIds ?? [])
+      .map((id) => feats.value.find((f) => f.id === id)?.name)
+      .filter((n): n is string => !!n);
     await downloadCharacterPdf(character.value, {
       classes: classes.value,
       subclasses: subclasses.value,
@@ -724,6 +730,7 @@ const exportPdf = async () => {
       races: races.value,
       items: itemLib.value,
       featureNames,
+      featNames,
     });
   } catch (e) {
     await askConfirm({

@@ -7,6 +7,7 @@ export type RulesKind =
   | "subclassFeature"
   | "race"
   | "spell"
+  | "feat"
   | "condition";
 
 export type RulesEntity<TData = unknown> = {
@@ -64,6 +65,14 @@ export type RaceData = {
   languageProficiencies: unknown[];
   skillProficiencies: unknown[];
   traitTags: string[];
+  entries: unknown[];
+};
+
+export type FeatData = {
+  page: number | null;
+  prerequisite: unknown[];
+  ability: unknown[];
+  category: string | null;
   entries: unknown[];
 };
 

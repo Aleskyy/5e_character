@@ -219,6 +219,21 @@ const normalizeSpell = (spell, spellSources) => ({
   },
 });
 
+const normalizeFeat = (feat) => ({
+  id: entityId("feat", feat.source, feat.name),
+  kind: "feat",
+  name: feat.name,
+  source: feat.source,
+  sourceType: classifySource(feat.source),
+  data: {
+    page: feat.page ?? null,
+    prerequisite: feat.prerequisite ?? [],
+    ability: feat.ability ?? [],
+    category: feat.category ?? null,
+    entries: normalizeEntries(feat.entries),
+  },
+});
+
 const main = async () => {
   const classIndex = await readJson("class", "index.json");
   const classFiles = await Promise.all(
@@ -272,11 +287,18 @@ const main = async () => {
     .flatMap((file) => file.spell ?? [])
     .map((spell) => normalizeSpell(spell, spellSources[spell.source]?.[spell.name]));
 
+  const featFile = await readJson("feats.json");
+  const feats = (featFile.feat ?? [])
+    .filter((feat) => feat.name && !feat._copy)
+    .map(normalizeFeat)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   const sources = [...new Set([
     ...classes.map((it) => it.source),
     ...subclasses.map((it) => it.source),
     ...races.map((it) => it.source),
     ...spells.map((it) => it.source),
+    ...feats.map((it) => it.source),
   ])].sort();
 
   await writeJson("classes.json", classes);
@@ -285,6 +307,7 @@ const main = async () => {
   await writeJson("subclassFeatures.json", subclassFeatures);
   await writeJson("races.json", races);
   await writeJson("spells.json", spells);
+  await writeJson("feats.json", feats);
   await writeJson("conditions.json", conditions);
   await writeJson("monsters.json", monsters);
   await writeJson("sources.json", sources);
@@ -295,6 +318,7 @@ const main = async () => {
   console.log(`Normalized ${subclassFeatures.length} subclass features`);
   console.log(`Normalized ${races.length} races`);
   console.log(`Normalized ${spells.length} spells`);
+  console.log(`Normalized ${feats.length} feats`);
   console.log(`Normalized ${conditions.length} conditions`);
   console.log(`Normalized ${monsters.length} monsters`);
 };

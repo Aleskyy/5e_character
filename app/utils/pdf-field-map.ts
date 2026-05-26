@@ -18,6 +18,8 @@ export type PdfExportContext = {
   items: CustomItem[];
   /** Names of all available race + class + subclass features, for the Features & Traits box. */
   featureNames?: string[];
+  /** Names of feats the character has taken, for the page-2 Feat+Traits box. */
+  featNames?: string[];
 };
 
 export type PdfFieldValues = { text: Record<string, string>; checks: Record<string, boolean> };
@@ -125,6 +127,7 @@ export const buildFieldValues = (c: CharacterDraft, ctx: PdfExportContext): PdfF
   setT(SCALAR.backstory, backstory);
   const allies = (c.relations ?? []).map((r) => [r.name, r.race, r.status].filter(Boolean).join(" — ")).join("\n");
   setT(SCALAR.allies, allies);
+  setT(SCALAR.featTraits2, (ctx.featNames ?? []).join("\n"));
 
   // --- Page 3 spellcasting ---
   const primaryCaster = resolved.find((r) => r.cls?.data.spellcastingAbility);
