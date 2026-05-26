@@ -190,14 +190,14 @@
       />
     </div>
     <div id="resources">
-      <ClassResourcesPanel
-        v-for="rc in resolvedClasses"
-        v-if="rc.cls"
-        :key="rc.entry.classId"
-        :character="character"
-        :class-name="rc.cls.name"
-        :level="rc.entry.level"
-      />
+      <template v-for="rc in resolvedClasses" :key="rc.entry.classId">
+        <ClassResourcesPanel
+          v-if="rc.cls"
+          :character="character"
+          :class-name="rc.cls.name"
+          :level="rc.entry.level"
+        />
+      </template>
     </div>
 
     <section id="slots" class="panel" v-if="spellSlotsAvailable">
