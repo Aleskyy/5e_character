@@ -22,7 +22,7 @@
     <div class="hd-row">
       <div>
         <p class="eyebrow">Hit Dice</p>
-        <p class="hd-text">d{{ hitDieFaces }} · {{ hdRemaining }} / {{ character.level }}</p>
+        <p class="hd-text">{{ hitDiceLabel || '—' }} · {{ hdRemaining }} / {{ character.level }}</p>
       </div>
       <div class="hd-controls">
         <button type="button" :disabled="hdRemaining <= 0" @click="spendHitDie">Spend</button>
@@ -128,7 +128,7 @@ const conditionDataFor = (cond: Condition) =>
 
 const props = defineProps<{
   character: CharacterDraft;
-  hitDieFaces: number;
+  hitDiceLabel: string;
   profBonus: number;
 }>();
 
