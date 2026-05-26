@@ -27,6 +27,12 @@ export type InventoryEntry = {
   containerId?: string | null;
 };
 
+export type ClassEntry = {
+  classId: string;
+  subclassId: string;
+  level: number;
+};
+
 export type CharacterBackground = {
   name?: string;
   alignment?: string;
@@ -47,6 +53,7 @@ export type CharacterDraft = {
   level: number;
   classId: string;
   subclassId: string;
+  classes: ClassEntry[];
   raceId: string;
   abilityScores: AbilityScores;
   currency: {
