@@ -95,7 +95,10 @@ const props = defineProps<{
   selectedSubclass?: RulesEntity<SubclassData>;
   spellcastingMod: number;
   profBonus: number;
+  classLevel?: number;
 }>();
+
+const effectiveLevel = computed(() => props.classLevel ?? props.character.level ?? 1);
 
 const tab = ref<"prepared" | "known" | "browse">("known");
 const search = ref("");
@@ -140,14 +143,14 @@ const preparedNonCantrips = computed(() => preparedSpells.value.filter((s) => s.
 
 const cantripsAllowed = computed(() => {
   const prog = props.selectedClass?.data.cantripProgression ?? [];
-  return prog[(props.character.level ?? 1) - 1] ?? 0;
+  return prog[effectiveLevel.value - 1] ?? 0;
 });
 
 const spellsKnownAllowed = computed(() => {
   const prog = props.selectedClass?.data.spellsKnownProgression
     ?? props.selectedClass?.data.spellsKnownProgressionFixed
     ?? [];
-  return prog[(props.character.level ?? 1) - 1] ?? 0;
+  return prog[effectiveLevel.value - 1] ?? 0;
 });
 
 const casterProgression = computed(() => props.selectedClass?.data.casterProgression ?? null);
@@ -169,9 +172,9 @@ const casterTypeLabel = computed(() => {
 });
 
 const halfCasterLevel = computed(() => {
-  if (casterProgression.value === "1/2") return Math.floor(props.character.level / 2);
-  if (casterProgression.value === "1/3") return Math.floor(props.character.level / 3);
-  return props.character.level;
+  if (casterProgression.value === "1/2") return Math.floor(effectiveLevel.value / 2);
+  if (casterProgression.value === "1/3") return Math.floor(effectiveLevel.value / 3);
+  return effectiveLevel.value;
 });
 
 const preparedAllowed = computed(() => {
@@ -179,7 +182,7 @@ const preparedAllowed = computed(() => {
   if (typeof formula !== "string") return 0;
   const lvl = casterProgression.value === "1/2" || casterProgression.value === "1/3"
     ? halfCasterLevel.value
-    : props.character.level;
+    : effectiveLevel.value;
   return Math.max(1, lvl + props.spellcastingMod);
 });
 
