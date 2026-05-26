@@ -1,19 +1,7 @@
 import type { CharacterDraft } from "~/types/character";
-import { createEmptyCharacter } from "~/utils/character";
+import { normalizeCharacter } from "~/utils/character";
 
 const STORAGE_KEY = "character-forge.characters.v1";
-
-const normalizeCharacter = (character: Partial<CharacterDraft> & { gold?: number }) => ({
-  ...createEmptyCharacter(),
-  ...character,
-  subclassId: character.subclassId ?? "",
-  currency: character.currency ?? {
-    cp: 0,
-    sp: 0,
-    gp: character.gold ?? 0,
-    pp: 0,
-  },
-});
 
 const readCharacters = () => {
   if (!import.meta.client) return [];

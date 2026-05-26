@@ -1,5 +1,6 @@
-import type { AbilityScores, CharacterDraft } from "~/types/character";
+import type { AbilityScores, CharacterDraft, ClassEntry } from "~/types/character";
 import type { Ability, ClassData, RulesEntity } from "~/types/rules";
+import { totalLevel } from "~/utils/multiclass";
 
 export const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -37,6 +38,7 @@ export const createEmptyCharacter = (): CharacterDraft => {
     level: 1,
     classId: "",
     subclassId: "",
+    classes: [],
     raceId: "",
     abilityScores: defaultAbilityScores(),
     currency: {
@@ -63,3 +65,38 @@ export const cantripsKnownForLevel = (
   characterClass: RulesEntity<ClassData> | undefined,
   level: number,
 ) => characterClass?.data.cantripProgression[level - 1] ?? 0;
+
+export const normalizeCharacter = (
+  input: Partial<CharacterDraft> & { gold?: number },
+): CharacterDraft => {
+  const merged = {
+    ...createEmptyCharacter(),
+    ...input,
+    subclassId: input.subclassId ?? "",
+    currency: input.currency ?? {
+      cp: 0,
+      sp: 0,
+      gp: input.gold ?? 0,
+      pp: 0,
+    },
+  };
+
+  let classes: ClassEntry[] = Array.isArray(merged.classes) ? merged.classes : [];
+  if (classes.length === 0 && merged.classId) {
+    classes = [{
+      classId: merged.classId,
+      subclassId: merged.subclassId ?? "",
+      level: merged.level ?? 1,
+    }];
+  }
+
+  const level = classes.length ? totalLevel(classes) : (merged.level ?? 1);
+
+  return {
+    ...merged,
+    classes,
+    level,
+    classId: classes[0]?.classId ?? merged.classId ?? "",
+    subclassId: classes[0]?.subclassId ?? merged.subclassId ?? "",
+  };
+};
