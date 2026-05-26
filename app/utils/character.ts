@@ -89,6 +89,8 @@ export const normalizeCharacter = (
       level: merged.level ?? 1,
     }];
   }
+  // Drop ghost entries (e.g. an unfilled "Add class" row) so they don't persist.
+  classes = classes.filter((entry) => entry.classId);
 
   const level = classes.length ? totalLevel(classes) : (merged.level ?? 1);
 

@@ -155,7 +155,7 @@
       </div>
     </section>
     <div id="combat">
-      <CombatPanel :character="character" :hit-dice-label="sheetHitDiceLabel" :prof-bonus="profBonus" />
+      <CombatPanel :character="character" :hit-dice-label="sheetHitDiceLabel" :total-level="totalChrLevel" :prof-bonus="profBonus" />
     </div>
 
 
@@ -686,8 +686,11 @@ const restoreAllSlots = () => {
 
 const updateClasses = (next: CharacterDraft["classes"]) => {
   if (!character.value) return;
-  character.value.classes = next;
-  character.value.level = next.length ? totalLevel(next) : character.value.level;
+  character.value = {
+    ...character.value,
+    classes: next,
+    level: next.length ? totalLevel(next) : character.value.level,
+  };
 };
 
 const exportCharacter = () => {
