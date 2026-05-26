@@ -158,6 +158,9 @@
       </div>
     </section>
     <div id="feats"><FeatsPanel :character="character" :feats="feats ?? []" /></div>
+    <div v-if="availableFightingStyles.length" id="fighting-styles">
+      <FightingStylePanel :character="character" :options="availableFightingStyles" />
+    </div>
     <div id="combat">
       <CombatPanel :character="character" :hit-dice-label="sheetHitDiceLabel" :total-level="totalChrLevel" :prof-bonus="profBonus" />
     </div>
@@ -358,7 +361,7 @@
 
 <script setup lang="ts">
 import type { CharacterDraft } from "~/types/character";
-import type { Ability, ClassData, FeatData, RaceData, RulesEntity, SpellData, SubclassData } from "~/types/rules";
+import type { Ability, ClassData, FeatData, FightingStyleData, RaceData, RulesEntity, SpellData, SubclassData } from "~/types/rules";
 import {
   abilities,
   abilityModifier,
@@ -396,6 +399,7 @@ const { data: races } = useFetch<RulesEntity<RaceData>[]>("/data/races.json", { 
 const { data: subclasses } = useFetch<RulesEntity<SubclassData>[]>("/data/subclasses.json", { default: () => [], server: false });
 const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json", { default: () => [], server: false });
 const { data: feats } = useFetch<RulesEntity<FeatData>[]>("/data/feats.json", { default: () => [], server: false });
+const { data: fightingStyles } = useFetch<RulesEntity<FightingStyleData>[]>("/data/fighting-styles.json", { default: () => [], server: false });
 const { data: classFeatures } = useFetch<ClassFeature[]>("/data/classFeatures.json", { default: () => [], server: false });
 const { data: subclassFeatures } = useFetch<SubclassFeature[]>("/data/subclassFeatures.json", { default: () => [], server: false });
 
@@ -582,6 +586,14 @@ const raceFeatureNames = computed(() =>
     .map((e: any) => ({ name: String(e.name) })),
 );
 
+const characterClassNames = computed(() =>
+  resolvedClasses.value.map(({ cls }) => cls?.name).filter((n): n is string => !!n),
+);
+
+const availableFightingStyles = computed(() =>
+  fightingStyles.value.filter((s) => s.data.classes.some((cn) => characterClassNames.value.includes(cn))),
+);
+
 const resourcesAvailable = computed(() => resolvedClasses.value.some(({ cls }) => cls));
 const spellSlotsAvailable = computed(() => spellSlots.value.some((n) => n > 0) || pact.value !== null);
 
@@ -594,6 +606,7 @@ const navLinks = computed(() => {
   if (spellSlotsAvailable.value) links.push({ id: "slots", label: "Spell Slots" });
   links.push({ id: "abilities", label: "Abilities" });
   links.push({ id: "feats", label: "Feats" });
+  if (availableFightingStyles.value.length) links.push({ id: "fighting-styles", label: "Fighting Styles" });
   if (hasCasting.value) links.push({ id: "casting", label: "Spellcasting" });
   links.push({ id: "skills", label: "Skills" });
   if (anyEquippedWeapon.value) links.push({ id: "attacks", label: "Attacks" });
@@ -715,10 +728,15 @@ const exportPdf = async () => {
   if (!character.value || exporting.value) return;
   exporting.value = true;
   try {
+    const fightingStyleNames = (character.value.fightingStyleIds ?? [])
+      .map((id) => fightingStyles.value.find((s) => s.id === id)?.name)
+      .filter((n): n is string => !!n)
+      .map((n) => `Fighting Style: ${n}`);
     const featureNames = [
       ...raceFeatureNames.value.map((f) => f.name),
       ...classFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
       ...subclassFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
+      ...fightingStyleNames,
     ];
     const featNames = (character.value.featIds ?? [])
       .map((id) => feats.value.find((f) => f.id === id)?.name)

@@ -89,6 +89,7 @@ export type CharacterDraft = {
 
   preparedSpellIds?: string[];
   featIds?: string[];
+  fightingStyleIds?: string[];
   classResourcesUsed?: Record<string, number>;
 
   usedSpellSlots?: number[];

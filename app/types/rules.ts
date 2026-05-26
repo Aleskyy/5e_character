@@ -8,6 +8,7 @@ export type RulesKind =
   | "race"
   | "spell"
   | "feat"
+  | "fightingStyle"
   | "condition";
 
 export type RulesEntity<TData = unknown> = {
@@ -73,6 +74,13 @@ export type FeatData = {
   prerequisite: unknown[];
   ability: unknown[];
   category: string | null;
+  entries: unknown[];
+};
+
+export type FightingStyleData = {
+  page: number | null;
+  /** Class names that can take this fighting style (e.g. "Fighter", "Ranger"). */
+  classes: string[];
   entries: unknown[];
 };
 

@@ -234,6 +234,30 @@ const normalizeFeat = (feat) => ({
   },
 });
 
+const FIGHTING_STYLE_CLASS = {
+  "FS:F": "Fighter",
+  "FS:R": "Ranger",
+  "FS:P": "Paladin",
+  "FS:B": "Bard",
+};
+
+const normalizeFightingStyle = (opt) => {
+  const featureType = opt.featureType ?? [];
+  const classes = [...new Set(featureType.map((t) => FIGHTING_STYLE_CLASS[t]).filter(Boolean))];
+  return {
+    id: entityId("fightingStyle", opt.source, opt.name),
+    kind: "fightingStyle",
+    name: opt.name,
+    source: opt.source,
+    sourceType: classifySource(opt.source),
+    data: {
+      page: opt.page ?? null,
+      classes,
+      entries: normalizeEntries(opt.entries),
+    },
+  };
+};
+
 const main = async () => {
   const classIndex = await readJson("class", "index.json");
   const classFiles = await Promise.all(
@@ -293,12 +317,19 @@ const main = async () => {
     .map(normalizeFeat)
     .sort((a, b) => a.name.localeCompare(b.name));
 
+  const optFeatFile = await readJson("optionalfeatures.json");
+  const fightingStyles = (optFeatFile.optionalfeature ?? [])
+    .filter((opt) => opt.name && !opt._copy && (opt.featureType ?? []).some((t) => String(t).startsWith("FS:")))
+    .map(normalizeFightingStyle)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   const sources = [...new Set([
     ...classes.map((it) => it.source),
     ...subclasses.map((it) => it.source),
     ...races.map((it) => it.source),
     ...spells.map((it) => it.source),
     ...feats.map((it) => it.source),
+    ...fightingStyles.map((it) => it.source),
   ])].sort();
 
   await writeJson("classes.json", classes);
@@ -308,6 +339,7 @@ const main = async () => {
   await writeJson("races.json", races);
   await writeJson("spells.json", spells);
   await writeJson("feats.json", feats);
+  await writeJson("fighting-styles.json", fightingStyles);
   await writeJson("conditions.json", conditions);
   await writeJson("monsters.json", monsters);
   await writeJson("sources.json", sources);
@@ -319,6 +351,7 @@ const main = async () => {
   console.log(`Normalized ${races.length} races`);
   console.log(`Normalized ${spells.length} spells`);
   console.log(`Normalized ${feats.length} feats`);
+  console.log(`Normalized ${fightingStyles.length} fighting styles`);
   console.log(`Normalized ${conditions.length} conditions`);
   console.log(`Normalized ${monsters.length} monsters`);
 };

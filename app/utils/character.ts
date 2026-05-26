@@ -52,6 +52,7 @@ export const createEmptyCharacter = (): CharacterDraft => {
     temporaryHp: 0,
     selectedSpellIds: [],
     featIds: [],
+    fightingStyleIds: [],
     background: {},
     createdAt: now,
     updatedAt: now,
