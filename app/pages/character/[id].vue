@@ -369,6 +369,13 @@ import {
   type ClassLookup,
 } from "~/utils/multiclass";
 import { SKILLS, type Skill } from "~/utils/skills";
+import {
+  skillBonus as statSkillBonus,
+  saveBonus as statSaveBonus,
+  isSaveProficient as statIsSaveProficient,
+  isSkillProficient as statIsSkillProficient,
+  isSkillExpert as statIsSkillExpert,
+} from "~/utils/character-stats";
 
 type ClassFeature = RulesEntity<{ className: string; classSource: string; level: number | null; entries: unknown[] }>;
 type SubclassFeature = RulesEntity<{ className: string; classSource: string; subclassShortName: string; subclassSource: string; level: number | null; entries: unknown[] }>;
@@ -596,17 +603,11 @@ const navLinks = computed(() => {
 
 const anyEquippedWeapon = computed(() => (character.value?.inventory ?? []).some((e) => e.equipped));
 
-const isSaveProficient = (ability: Ability) => {
-  const explicit = character.value?.savingThrowProficiencies;
-  if (explicit && explicit.length) return explicit.includes(ability);
-  return primaryEntry.value?.cls?.data.savingThrowProficiencies?.includes(ability) ?? false;
-};
+const isSaveProficient = (ability: Ability) =>
+  statIsSaveProficient(character.value!, ability, primaryEntry.value?.cls);
 
-const saveBonus = (ability: Ability) => {
-  if (!character.value) return 0;
-  const mod = abilityModifier(character.value.abilityScores[ability]);
-  return mod + (isSaveProficient(ability) ? profBonus.value : 0);
-};
+const saveBonus = (ability: Ability) =>
+  character.value ? statSaveBonus(character.value, ability, profBonus.value, primaryEntry.value?.cls) : 0;
 
 const toggleSaveProficiency = (ability: Ability) => {
   if (!character.value) return;
@@ -619,10 +620,10 @@ const toggleSaveProficiency = (ability: Ability) => {
 };
 
 const isSkillProficient = (key: string) =>
-  character.value?.skillProficiencies?.includes(key) ?? false;
+  character.value ? statIsSkillProficient(character.value, key) : false;
 
 const isSkillExpert = (key: string) =>
-  character.value?.skillExpertise?.includes(key) ?? false;
+  character.value ? statIsSkillExpert(character.value, key) : false;
 
 const cycleSkill = (key: string) => {
   if (!character.value) return;
@@ -640,13 +641,8 @@ const cycleSkill = (key: string) => {
   character.value.skillExpertise = [...exp];
 };
 
-const skillBonus = (skill: Skill) => {
-  if (!character.value) return 0;
-  const mod = abilityModifier(character.value.abilityScores[skill.ability]);
-  if (isSkillExpert(skill.key)) return mod + profBonus.value * 2;
-  if (isSkillProficient(skill.key)) return mod + profBonus.value;
-  return mod;
-};
+const skillBonus = (skill: Skill) =>
+  character.value ? statSkillBonus(character.value, skill, profBonus.value) : 0;
 
 const hpPct = computed(() => {
   if (!character.value || character.value.maxHp <= 0) return 0;

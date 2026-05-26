@@ -27,7 +27,8 @@
 
 <script setup lang="ts">
 import type { CharacterDraft } from "~/types/character";
-import { abilityModifier, signed } from "~/utils/character";
+import { signed } from "~/utils/character";
+import { computeAttacks } from "~/utils/character-stats";
 
 const props = defineProps<{ character: CharacterDraft; profBonus: number }>();
 
@@ -39,29 +40,7 @@ const bestAttack = computed(() => {
   return [...attacks.value].sort((a, b) => b.attackBonus - a.attackBonus)[0];
 });
 
-const attacks = computed(() => {
-  const inv = props.character.inventory ?? [];
-  return inv
-    .filter((e) => e.equipped)
-    .map((e) => library.value.find((i) => i.id === e.itemId))
-    .filter((it): it is NonNullable<typeof it> => !!it && it.type === "weapon")
-    .map((it, idx) => {
-      const ability = it.damageAbility ?? "str";
-      const mod = abilityModifier(props.character.abilityScores[ability]);
-      const isProf = props.character.weaponProficiencies?.length
-        ? true
-        : false;
-      const bonus = mod + (isProf ? props.profBonus : 0);
-      const dmgBonus = mod >= 0 ? `+${mod}` : String(mod);
-      return {
-        id: `${it.id}-${idx}`,
-        name: it.name,
-        attackBonus: bonus,
-        damage: it.damage ? `${it.damage}${mod !== 0 ? ` ${dmgBonus}` : ""}` : dmgBonus,
-        damageType: it.damageType ?? "",
-      };
-    });
-});
+const attacks = computed(() => computeAttacks(props.character, library.value, props.profBonus));
 </script>
 
 <style scoped>
