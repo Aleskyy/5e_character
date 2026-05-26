@@ -9,11 +9,16 @@
     "generate": "nuxt generate",
     "normalize:data": "node scripts/normalize-data.mjs",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "nuxt": "4.1.2",
     "vue": "^3.5.33",
     "vue-router": "^5.0.6"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.7"
   }
 }
