@@ -18,6 +18,9 @@
       </div>
       <div class="header-actions">
         <button type="button" class="ghost-button" @click="shareOpen = true">Share / Import</button>
+        <button type="button" class="ghost-button" :disabled="exporting" @click="exportPdf">
+          {{ exporting ? "Exporting…" : "Export PDF" }}
+        </button>
         <button type="button" class="danger-button" @click="deleteCharacter">Delete</button>
       </div>
     </header>
@@ -361,6 +364,7 @@ import {
   proficiencyBonus,
   signed,
 } from "~/utils/character";
+import { downloadCharacterPdf } from "~/utils/pdf-export";
 import {
   totalLevel,
   effectiveSpellSlots,
@@ -702,6 +706,30 @@ const exportCharacter = () => {
 };
 
 const { confirm: askConfirm } = useConfirm();
+
+const exporting = ref(false);
+const exportPdf = async () => {
+  if (!character.value || exporting.value) return;
+  exporting.value = true;
+  try {
+    await downloadCharacterPdf(character.value, {
+      classes: classes.value,
+      subclasses: subclasses.value,
+      spells: spells.value,
+      races: races.value,
+      items: itemLib.value,
+    });
+  } catch (e) {
+    await askConfirm({
+      title: "Export failed",
+      message: e instanceof Error ? e.message : "Could not generate the PDF.",
+      confirmLabel: "OK",
+    });
+  } finally {
+    exporting.value = false;
+  }
+};
+
 const deleteCharacter = async () => {
   if (!character.value) return;
   if (!await askConfirm({ title: `Delete ${character.value.name}?`, message: "This cannot be undone.", confirmLabel: "Delete" })) return;
