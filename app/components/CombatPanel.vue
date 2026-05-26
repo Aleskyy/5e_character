@@ -113,8 +113,8 @@ import type { CharacterDraft, Condition } from "~/types/character";
 import type { RulesEntity } from "~/types/rules";
 import RuleEntries from "~/components/RuleEntries.vue";
 import { abilityModifier } from "~/utils/character";
+import { defaultArmorClass, passiveScore } from "~/utils/character-stats";
 import { CONDITIONS } from "~/utils/dnd-constants";
-import { SKILLS } from "~/utils/skills";
 
 type ConditionEntity = RulesEntity<{ page: number | null; entries: unknown[] }>;
 
@@ -136,15 +136,7 @@ const props = defineProps<{
 const { items: library, load: loadLibrary } = useItemLibrary();
 onMounted(() => loadLibrary());
 
-const equippedAcBonus = computed(() => {
-  const inv = props.character.inventory ?? [];
-  return inv
-    .filter((e) => e.equipped)
-    .map((e) => library.value.find((i) => i.id === e.itemId))
-    .reduce((sum, item) => sum + (item?.acBonus ?? 0), 0);
-});
-
-const defaultAc = computed(() => 10 + abilityModifier(props.character.abilityScores.dex) + equippedAcBonus.value);
+const defaultAc = computed(() => defaultArmorClass(props.character, library.value));
 const defaultInit = computed(() => abilityModifier(props.character.abilityScores.dex));
 
 const hdRemaining = computed(() => props.totalLevel - (props.character.hitDiceUsed ?? 0));
@@ -154,14 +146,7 @@ const spendHitDie = () => {
   props.character.hitDiceUsed = (props.character.hitDiceUsed ?? 0) + 1;
 };
 
-const passive = (key: "perception" | "insight" | "investigation") => {
-  const skill = SKILLS.find((s) => s.key === key)!;
-  const mod = abilityModifier(props.character.abilityScores[skill.ability]);
-  const isProf = props.character.skillProficiencies?.includes(key) ?? false;
-  const isExp = props.character.skillExpertise?.includes(key) ?? false;
-  const bonus = isExp ? props.profBonus * 2 : isProf ? props.profBonus : 0;
-  return 10 + mod + bonus;
-};
+const passive = (key: "perception" | "insight" | "investigation") => passiveScore(props.character, key, props.profBonus);
 
 const setDS = (kind: "successes" | "failures", n: number) => {
   const ds = props.character.deathSaves ?? { successes: 0, failures: 0 };

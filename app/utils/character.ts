@@ -51,6 +51,7 @@ export const createEmptyCharacter = (): CharacterDraft => {
     currentHp: 8,
     temporaryHp: 0,
     selectedSpellIds: [],
+    background: {},
     createdAt: now,
     updatedAt: now,
   };
