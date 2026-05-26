@@ -39,7 +39,7 @@ export const exportCharacterPdf = async (
     }
   }
 
-  form.flatten();
+  // Leave the form un-flattened so the exported PDF stays editable in any reader.
   return pdf.save();
 };
 
