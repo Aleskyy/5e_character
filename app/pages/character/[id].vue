@@ -12,17 +12,7 @@
         <span v-else>＋</span>
       </button>
       <div class="header-id">
-        <p class="eyebrow">
-          {{ classLabel || "No class" }} · Level
-          <input
-            v-model.number="character.level"
-            type="number"
-            min="1"
-            max="20"
-            class="level-input"
-            aria-label="Character level"
-          />
-        </p>
+        <p class="eyebrow">{{ classLabel || "No class" }} · Level {{ totalChrLevel }}</p>
         <h1>{{ character.name || "Unnamed" }}</h1>
         <p class="lede" v-if="raceLabel">{{ raceLabel }}<span v-if="subclassLabel"> · {{ subclassLabel }}</span></p>
       </div>
@@ -31,6 +21,19 @@
         <button type="button" class="danger-button" @click="deleteCharacter">Delete</button>
       </div>
     </header>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">Classes</p><h2>Class & levels</h2></div>
+      </div>
+      <ClassesEditor
+        :model-value="character.classes"
+        :classes="classes ?? []"
+        :subclasses="subclasses ?? []"
+        :ability-scores="character.abilityScores"
+        @update:model-value="updateClasses"
+      />
+    </section>
 
     <ShareCharacterModal
       :open="shareOpen"
@@ -56,8 +59,8 @@
       :open="combatModalOpen"
       :character="character"
       :prof-bonus="profBonus"
-      :selected-class="selectedClass"
-      :selected-subclass="selectedSubclass"
+      :selected-class="primaryEntry?.cls"
+      :selected-subclass="primaryEntry?.sub"
       :spells="spells"
       @close="combatModalOpen = false"
     />
@@ -126,8 +129,8 @@
     </div>
     <FeaturesSummary
       :race-features="raceFeatureNames"
-      :class-features-by-level="classFeaturesByLevel as any"
-      :subclass-features-by-level="subclassFeaturesByLevel as any"
+      :class-features-by-level="(classFeatureGroups[0]?.groups ?? []) as any"
+      :subclass-features-by-level="(subclassFeatureGroups[0]?.groups ?? []) as any"
     />
 
     <InventoryPanel :character="character" />
@@ -152,46 +155,52 @@
       </div>
     </section>
     <div id="combat">
-      <CombatPanel :character="character" :hit-die-faces="hitDieFaces" :prof-bonus="profBonus" />
+      <CombatPanel :character="character" :hit-dice-label="sheetHitDiceLabel" :total-level="totalChrLevel" :prof-bonus="profBonus" />
     </div>
 
 
     <div id="attacks"><AttacksPanel :character="character" :prof-bonus="profBonus" /></div>
 
-    <section id="casting" class="panel" v-if="spellSaveDc !== null">
+    <section id="casting" class="panel" v-if="hasCasting">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">Casting</p>
-          <h2>Spellcasting</h2>
-        </div>
+        <div><p class="eyebrow">Casting</p><h2>Spellcasting</h2></div>
       </div>
-      <dl class="cast-grid">
-        <div><dt>Ability</dt><dd>{{ spellcastingAbility?.toUpperCase() }}</dd></div>
-        <div><dt>Save DC</dt><dd>{{ spellSaveDc }}</dd></div>
-        <div><dt>Attack</dt><dd>{{ signed(spellAttackBonus ?? 0) }}</dd></div>
-        <div><dt>Prof.</dt><dd>{{ signed(profBonus) }}</dd></div>
-      </dl>
+      <div v-for="block in casterBlocks" :key="block.key" class="cast-class">
+        <h3 class="cast-class-name">{{ block.className }}</h3>
+        <dl class="cast-grid">
+          <div><dt>Ability</dt><dd>{{ block.ability.toUpperCase() }}</dd></div>
+          <div><dt>Save DC</dt><dd>{{ block.saveDc }}</dd></div>
+          <div><dt>Attack</dt><dd>{{ signed(block.attack) }}</dd></div>
+          <div><dt>Prof.</dt><dd>{{ signed(profBonus) }}</dd></div>
+        </dl>
+      </div>
     </section>
 
-        <div id="spells">
+    <div id="spells">
       <SpellPreparationPanel
-        v-if="spellSaveDc !== null"
+        v-for="block in casterBlocks"
+        :key="block.key"
         :character="character"
         :spells="spells"
-        :selected-class="selectedClass"
-        :selected-subclass="selectedSubclass"
-        :spellcasting-mod="spellcastingMod"
+        :selected-class="block.cls"
+        :selected-subclass="block.sub"
+        :spellcasting-mod="block.mod"
         :prof-bonus="profBonus"
+        :class-level="block.level"
       />
     </div>
-    <div id="resources"><ClassResourcesPanel
-      v-if="classLabel"
-      :character="character"
-      :class-name="classLabel"
-      :level="character.level"
-    /></div>
+    <div id="resources">
+      <template v-for="rc in resolvedClasses" :key="rc.entry.classId">
+        <ClassResourcesPanel
+          v-if="rc.cls"
+          :character="character"
+          :class-name="rc.cls.name"
+          :level="rc.entry.level"
+        />
+      </template>
+    </div>
 
-    <section id="slots" class="panel" v-if="spellSlots.length">
+    <section id="slots" class="panel" v-if="spellSlotsAvailable">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Magicks</p>
@@ -217,10 +226,22 @@
           <span class="slot-count">{{ total - usedSlots(idx) }} / {{ total }}</span>
         </div>
       </div>
+      <div v-if="pact" class="pact-row">
+        <span class="slot-label">Pact</span>
+        <div class="pips">
+          <button
+            v-for="n in pact.count"
+            :key="n"
+            type="button"
+            class="pip"
+            :class="{ spent: n <= usedSlots(9) }"
+            :aria-label="`Pact slot ${n}`"
+            @click="toggleSlot(9, n)"
+          ></button>
+        </div>
+        <span class="slot-count">Level {{ pact.level }} · {{ pact.count - usedSlots(9) }} / {{ pact.count }}</span>
+      </div>
     </section>
-
-
-
 
 
     <section id="skills" class="panel">
@@ -268,52 +289,42 @@
       <RuleEntries :entries="raceEntries" />
     </section>
 
-    <section id="class-features" class="panel" v-if="classFeaturesByLevel.length">
+    <section id="class-features" class="panel" v-if="classFeatureGroups.length">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">Discipline</p>
-          <h2>{{ classLabel }} Features</h2>
-        </div>
+        <div><p class="eyebrow">Discipline</p><h2>Class Features</h2></div>
       </div>
-      <details
-        v-for="group in classFeaturesByLevel"
-        :key="`cl-${group.level}`"
-        class="feature-group"
-        open
-      >
-        <summary>
-          <span class="lvl">Lv {{ group.level }}</span>
-          <span class="names">{{ group.features.map((f: any) => f.name).join(" · ") }}</span>
-        </summary>
-        <article v-for="feature in group.features" :key="feature.id" :id="`cl-${feature.id}`" class="feature">
-          <h3>{{ feature.name }}</h3>
-          <RuleEntries :entries="(feature.data.entries ?? []) as any" />
-        </article>
-      </details>
+      <div v-for="cf in classFeatureGroups" :key="cf.key" class="class-feature-block">
+        <h3 class="feature-class-name">{{ cf.name }}</h3>
+        <details v-for="group in cf.groups" :key="`cl-${cf.key}-${group.level}`" class="feature-group" open>
+          <summary>
+            <span class="lvl">Lv {{ group.level }}</span>
+            <span class="names">{{ group.features.map((f: any) => f.name).join(" · ") }}</span>
+          </summary>
+          <article v-for="feature in group.features" :key="feature.id" :id="`cl-${feature.id}`" class="feature">
+            <h3>{{ feature.name }}</h3>
+            <RuleEntries :entries="(feature.data.entries ?? []) as any" />
+          </article>
+        </details>
+      </div>
     </section>
 
-    <section id="subclass-features" class="panel" v-if="subclassFeaturesByLevel.length">
+    <section id="subclass-features" class="panel" v-if="subclassFeatureGroups.length">
       <div class="section-heading">
-        <div>
-          <p class="eyebrow">Path</p>
-          <h2>{{ subclassLabel }} Features</h2>
-        </div>
+        <div><p class="eyebrow">Path</p><h2>Subclass Features</h2></div>
       </div>
-      <details
-        v-for="group in subclassFeaturesByLevel"
-        :key="`sc-${group.level}`"
-        class="feature-group"
-        open
-      >
-        <summary>
-          <span class="lvl">Lv {{ group.level }}</span>
-          <span class="names">{{ group.features.map((f: any) => f.name).join(" · ") }}</span>
-        </summary>
-        <article v-for="feature in group.features" :key="feature.id" :id="`sc-${feature.id}`" class="feature">
-          <h3>{{ feature.name }}</h3>
-          <RuleEntries :entries="(feature.data.entries ?? []) as any" />
-        </article>
-      </details>
+      <div v-for="sf in subclassFeatureGroups" :key="sf.key" class="class-feature-block">
+        <h3 class="feature-class-name">{{ sf.name }}</h3>
+        <details v-for="group in sf.groups" :key="`sc-${sf.key}-${group.level}`" class="feature-group" open>
+          <summary>
+            <span class="lvl">Lv {{ group.level }}</span>
+            <span class="names">{{ group.features.map((f: any) => f.name).join(" · ") }}</span>
+          </summary>
+          <article v-for="feature in group.features" :key="feature.id" :id="`sc-${feature.id}`" class="feature">
+            <h3>{{ feature.name }}</h3>
+            <RuleEntries :entries="(feature.data.entries ?? []) as any" />
+          </article>
+        </details>
+      </div>
     </section>
 
     <section id="notes" class="panel">
@@ -349,8 +360,14 @@ import {
   abilityModifier,
   proficiencyBonus,
   signed,
-  spellSlotsForLevel,
 } from "~/utils/character";
+import {
+  totalLevel,
+  effectiveSpellSlots,
+  pactSlots,
+  hitDiceLabel,
+  type ClassLookup,
+} from "~/utils/multiclass";
 import { SKILLS, type Skill } from "~/utils/skills";
 
 type ClassFeature = RulesEntity<{ className: string; classSource: string; level: number | null; entries: unknown[] }>;
@@ -405,17 +422,44 @@ watch(character, (next) => {
   }, 350);
 }, { deep: true });
 
-const selectedClass = computed(() => character.value ? classes.value.find((c) => c.id === character.value!.classId) : undefined);
-const selectedSubclass = computed(() => character.value ? subclasses.value.find((s) => s.id === character.value!.subclassId) : undefined);
 const selectedRace = computed(() => character.value ? races.value.find((r) => r.id === character.value!.raceId) : undefined);
 
-const classLabel = computed(() => selectedClass.value?.name ?? "");
-const subclassLabel = computed(() => selectedSubclass.value?.name ?? "");
 const raceLabel = computed(() => selectedRace.value?.name ?? "");
 
-const profBonus = computed(() => proficiencyBonus(character.value?.level ?? 1));
+const classLookup = computed<ClassLookup>(() => {
+  const map = new Map(classes.value.map((c) => [c.id, c]));
+  return (cid: string) => map.get(cid);
+});
 
-const hitDieFaces = computed(() => selectedClass.value?.data.hitDie?.faces ?? 8);
+const classEntries = computed(() => character.value?.classes ?? []);
+
+const resolvedClasses = computed(() =>
+  classEntries.value.map((entry) => ({
+    entry,
+    cls: classes.value.find((c) => c.id === entry.classId),
+    sub: subclasses.value.find((s) => s.id === entry.subclassId),
+  })),
+);
+
+const primaryEntry = computed(() => resolvedClasses.value[0]);
+
+const totalChrLevel = computed(() =>
+  classEntries.value.length ? totalLevel(classEntries.value) : (character.value?.level ?? 1),
+);
+
+const classLabel = computed(() =>
+  resolvedClasses.value
+    .map(({ entry, cls }) => `${cls?.name ?? "—"} ${entry.level}`)
+    .join(" / "),
+);
+
+const subclassLabel = computed(() =>
+  resolvedClasses.value.map(({ sub }) => sub?.name).filter(Boolean).join(" · "),
+);
+
+const profBonus = computed(() => proficiencyBonus(totalChrLevel.value));
+
+const sheetHitDiceLabel = computed(() => hitDiceLabel(classEntries.value, classLookup.value));
 
 const { items: itemLib, load: loadItemLib } = useItemLibrary();
 onMounted(() => loadItemLib());
@@ -428,71 +472,94 @@ const equippedAcBonus = computed(() => {
     .reduce((sum, item) => sum + (item?.acBonus ?? 0), 0);
 });
 
-const spellSlots = computed(() => spellSlotsForLevel(selectedClass.value, character.value?.level ?? 1));
+const spellSlots = computed(() => effectiveSpellSlots(classEntries.value, classLookup.value));
 
-const spellcastingAbility = computed(() => selectedClass.value?.data.spellcastingAbility ?? null);
+const pact = computed(() => pactSlots(classEntries.value, classLookup.value));
 
-const spellcastingMod = computed(() => {
-  if (!spellcastingAbility.value || !character.value) return 0;
-  return abilityModifier(character.value.abilityScores[spellcastingAbility.value]);
-});
+type CasterBlock = {
+  key: string;
+  className: string;
+  cls: NonNullable<ReturnType<typeof classes.value.find>>;
+  sub: ReturnType<typeof subclasses.value.find>;
+  level: number;
+  ability: Ability;
+  mod: number;
+  saveDc: number;
+  attack: number;
+};
 
-const spellAttackBonus = computed(() => {
-  if (!spellcastingAbility.value || !character.value) return null;
-  return spellcastingMod.value + profBonus.value;
-});
-
-const spellSaveDc = computed(() => spellAttackBonus.value === null ? null : spellAttackBonus.value + 8);
-
-const knownSpells = computed(() => {
+const casterBlocks = computed<CasterBlock[]>(() => {
   if (!character.value) return [];
-  const ids = new Set(character.value.selectedSpellIds);
-  return spells.value
-    .filter((s) => ids.has(s.id))
-    .sort((a, b) => a.data.level - b.data.level || a.name.localeCompare(b.name));
+  const out: CasterBlock[] = [];
+  for (const { entry, cls, sub } of resolvedClasses.value) {
+    const ability = cls?.data.spellcastingAbility ?? null;
+    if (!cls || !ability) continue;
+    const mod = abilityModifier(character.value.abilityScores[ability]);
+    const attack = mod + profBonus.value;
+    out.push({
+      key: entry.classId,
+      className: cls.name,
+      cls,
+      sub,
+      level: entry.level,
+      ability,
+      mod,
+      saveDc: attack + 8,
+      attack,
+    });
+  }
+  return out;
 });
 
-const classFeaturesByLevel = computed(() => {
-  if (!character.value || !selectedClass.value) return [];
-  const lvl = character.value.level;
-  const matches = classFeatures.value.filter(
-    (f) =>
-      f.data.className === selectedClass.value!.name
-      && f.data.classSource === selectedClass.value!.source
-      && (f.data.level ?? 0) <= lvl,
-  );
-  const groups = new Map<number, ClassFeature[]>();
-  for (const f of matches) {
+const hasCasting = computed(() => casterBlocks.value.length > 0);
+
+const groupByLevel = <T extends { data: { level: number | null } }>(features: T[]) => {
+  const groups = new Map<number, T[]>();
+  for (const f of features) {
     const lv = f.data.level ?? 0;
     if (!groups.has(lv)) groups.set(lv, []);
     groups.get(lv)!.push(f);
   }
-  return [...groups.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([level, features]) => ({ level, features }));
-});
+  return [...groups.entries()].sort((a, b) => a[0] - b[0]).map(([level, fs]) => ({ level, features: fs }));
+};
 
-const subclassFeaturesByLevel = computed(() => {
-  if (!character.value || !selectedSubclass.value || !selectedClass.value) return [];
-  const lvl = character.value.level;
-  const matches = subclassFeatures.value.filter(
-    (f) =>
-      f.data.className === selectedClass.value!.name
-      && f.data.classSource === selectedClass.value!.source
-      && f.data.subclassShortName === selectedSubclass.value!.data.shortName
-      && f.data.subclassSource === selectedSubclass.value!.source
-      && (f.data.level ?? 0) <= lvl,
-  );
-  const groups = new Map<number, SubclassFeature[]>();
-  for (const f of matches) {
-    const lv = f.data.level ?? 0;
-    if (!groups.has(lv)) groups.set(lv, []);
-    groups.get(lv)!.push(f);
-  }
-  return [...groups.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([level, features]) => ({ level, features }));
-});
+const classFeatureGroups = computed(() =>
+  resolvedClasses.value
+    .filter(({ cls }) => cls)
+    .map(({ entry, cls }) => ({
+      key: entry.classId,
+      name: cls!.name,
+      groups: groupByLevel(
+        classFeatures.value.filter(
+          (f) =>
+            f.data.className === cls!.name
+            && f.data.classSource === cls!.source
+            && (f.data.level ?? 0) <= entry.level,
+        ),
+      ),
+    }))
+    .filter((c) => c.groups.length),
+);
+
+const subclassFeatureGroups = computed(() =>
+  resolvedClasses.value
+    .filter(({ cls, sub }) => cls && sub)
+    .map(({ entry, cls, sub }) => ({
+      key: entry.classId,
+      name: sub!.name,
+      groups: groupByLevel(
+        subclassFeatures.value.filter(
+          (f) =>
+            f.data.className === cls!.name
+            && f.data.classSource === cls!.source
+            && f.data.subclassShortName === sub!.data.shortName
+            && f.data.subclassSource === sub!.source
+            && (f.data.level ?? 0) <= entry.level,
+        ),
+      ),
+    }))
+    .filter((c) => c.groups.length),
+);
 
 const raceEntries = computed(() => (selectedRace.value?.data.entries ?? []) as any[]);
 
@@ -502,6 +569,9 @@ const raceFeatureNames = computed(() =>
     .map((e: any) => ({ name: String(e.name) })),
 );
 
+const resourcesAvailable = computed(() => resolvedClasses.value.some(({ cls }) => cls));
+const spellSlotsAvailable = computed(() => spellSlots.value.some((n) => n > 0) || pact.value !== null);
+
 const navLinks = computed(() => {
   const links = [
     { id: "vitals", label: "Vitals & Pack" },
@@ -510,33 +580,26 @@ const navLinks = computed(() => {
   if (resourcesAvailable.value) links.push({ id: "resources", label: "Resources" });
   if (spellSlotsAvailable.value) links.push({ id: "slots", label: "Spell Slots" });
   links.push({ id: "abilities", label: "Abilities" });
-  if (spellSaveDc.value !== null) links.push({ id: "casting", label: "Spellcasting" });
+  if (hasCasting.value) links.push({ id: "casting", label: "Spellcasting" });
   links.push({ id: "skills", label: "Skills" });
   if (anyEquippedWeapon.value) links.push({ id: "attacks", label: "Attacks" });
   links.push({ id: "relations", label: "Relations" });
   links.push({ id: "profs", label: "Proficiencies" });
   links.push({ id: "background", label: "Background" });
-  if (spellSaveDc.value !== null) links.push({ id: "spells", label: "Spells" });
+  if (hasCasting.value) links.push({ id: "spells", label: "Spells" });
   if (raceEntries.value.length) links.push({ id: "heritage", label: "Heritage" });
-  if (classFeaturesByLevel.value.length) links.push({ id: "class-features", label: "Class Features" });
-  if (subclassFeaturesByLevel.value.length) links.push({ id: "subclass-features", label: "Subclass Features" });
+  if (classFeatureGroups.value.length) links.push({ id: "class-features", label: "Class Features" });
+  if (subclassFeatureGroups.value.length) links.push({ id: "subclass-features", label: "Subclass Features" });
   links.push({ id: "notes", label: "Notes" });
   return links;
 });
-
-const resourcesAvailable = computed(() => {
-  if (!classLabel.value) return false;
-  return true;
-});
-
-const spellSlotsAvailable = computed(() => spellSlots.value.length > 0);
 
 const anyEquippedWeapon = computed(() => (character.value?.inventory ?? []).some((e) => e.equipped));
 
 const isSaveProficient = (ability: Ability) => {
   const explicit = character.value?.savingThrowProficiencies;
   if (explicit && explicit.length) return explicit.includes(ability);
-  return selectedClass.value?.data.savingThrowProficiencies?.includes(ability) ?? false;
+  return primaryEntry.value?.cls?.data.savingThrowProficiencies?.includes(ability) ?? false;
 };
 
 const saveBonus = (ability: Ability) => {
@@ -549,7 +612,7 @@ const toggleSaveProficiency = (ability: Ability) => {
   if (!character.value) return;
   const current = character.value.savingThrowProficiencies?.length
     ? [...character.value.savingThrowProficiencies]
-    : [...(selectedClass.value?.data.savingThrowProficiencies ?? [])];
+    : [...(primaryEntry.value?.cls?.data.savingThrowProficiencies ?? [])];
   const idx = current.indexOf(ability);
   if (idx >= 0) current.splice(idx, 1); else current.push(ability);
   character.value.savingThrowProficiencies = current;
@@ -621,6 +684,15 @@ const restoreAllSlots = () => {
   character.value.usedSpellSlots = [];
 };
 
+const updateClasses = (next: CharacterDraft["classes"]) => {
+  if (!character.value) return;
+  character.value = {
+    ...character.value,
+    classes: next,
+    level: next.length ? totalLevel(next) : character.value.level,
+  };
+};
+
 const exportCharacter = () => {
   if (!character.value) return;
   const data = JSON.stringify(character.value, null, 2);
@@ -682,20 +754,6 @@ const onShareImport = async (incoming: CharacterDraft) => {
 @media (max-width: 480px) {
   .char-avatar { width: 72px; height: 72px; }
 }
-
-.level-input {
-  width: 3.2em;
-  min-height: auto;
-  padding: 1px 4px;
-  margin-left: 4px;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  background: var(--bg-soft);
-  font: inherit;
-  color: inherit;
-  text-align: center;
-}
-.level-input:focus { box-shadow: none; border-color: var(--gilt); }
 
 .combat-modal-btn {
   width: 100%;
@@ -1105,5 +1163,27 @@ textarea {
   font-weight: 400;
   font-size: 1.1rem;
   color: var(--ink);
+}
+
+.cast-class + .cast-class { margin-top: 14px; }
+.cast-class-name,
+.feature-class-name {
+  margin: 12px 0 6px;
+  font-family: "IM Fell English SC", serif;
+  letter-spacing: 0.12em;
+  font-size: 0.9rem;
+  color: var(--gilt);
+}
+.class-feature-block + .class-feature-block { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.pact-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--rubric-deep);
+  border-radius: 4px;
+  background: rgba(199, 92, 75, 0.06);
 }
 </style>

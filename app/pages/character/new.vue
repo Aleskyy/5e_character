@@ -27,21 +27,6 @@
 
       <div class="form-grid">
         <label>Name <input v-model="draft.name" type="text" autocomplete="off" /></label>
-        <label>Level <input v-model.number="draft.level" type="number" min="1" max="20" /></label>
-
-        <label>Class
-          <select v-model="draft.classId">
-            <option value="">Choose a class</option>
-            <option v-for="o in classOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }}){{ o.sourceType === 'ua' ? ' [UA]' : '' }}</option>
-          </select>
-        </label>
-
-        <label>Subclass
-          <select v-model="draft.subclassId" :disabled="!subclassOptions.length">
-            <option value="">Choose a subclass</option>
-            <option v-for="o in subclassOptions" :key="o.id" :value="o.id">{{ o.name }} ({{ o.source }}){{ o.sourceType === 'ua' ? ' [UA]' : '' }}</option>
-          </select>
-        </label>
 
         <label>Race
           <select v-model="draft.raceId">
@@ -52,6 +37,16 @@
 
         <label>Max HP <input v-model.number="draft.maxHp" type="number" min="1" /></label>
       </div>
+
+      <div class="section-heading classes-heading">
+        <div><p class="eyebrow">Classes</p><h2>Class & levels</h2></div>
+      </div>
+      <ClassesEditor
+        v-model="draft.classes"
+        :classes="classes ?? []"
+        :subclasses="subclasses ?? []"
+        :ability-scores="draft.abilityScores"
+      />
 
       <button type="button" class="primary-button save-button" @click="saveCharacter">Save character</button>
     </section>
@@ -110,7 +105,6 @@ import type { ClassData, RaceData, RulesEntity, SpellData, SubclassData } from "
 import {
   abilities,
   abilityModifier,
-  cantripsKnownForLevel,
   createEmptyCharacter,
   signed,
 } from "~/utils/character";
@@ -124,21 +118,14 @@ const { data: races } = useFetch<RulesEntity<RaceData>[]>("/data/races.json", { 
 const { data: subclasses } = useFetch<RulesEntity<SubclassData>[]>("/data/subclasses.json", { default: () => [], server: false });
 const { data: spells } = useFetch<RulesEntity<SpellData>[]>("/data/spells.json", { default: () => [], server: false });
 
-const { spells: hbSpells, races: hbRaces, subraces: hbSubraces, classes: hbClasses, load: loadHomebrew } = useHomebrew();
+const { spells: hbSpells, races: hbRaces, subraces: hbSubraces, load: loadHomebrew } = useHomebrew();
 onMounted(() => loadHomebrew());
 
 const draft = reactive<CharacterDraft>(createEmptyCharacter());
+if (draft.classes.length === 0) draft.classes.push({ classId: "", subclassId: "", level: 1 });
 const imageModalOpen = ref(false);
 const spellSearch = ref("");
 const spellLevelFilter = ref(-1);
-
-const classOptions = computed(() => [
-  ...hbClasses.value.map((c) => ({ id: c.id, name: c.name, source: "Homebrew", sourceType: "homebrew" as const })),
-  ...classes.value
-    .filter((item) => item.data.edition === "classic")
-    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source))
-    .map((c) => ({ id: c.id, name: c.name, source: c.source, sourceType: c.sourceType })),
-]);
 
 const raceOptions = computed(() => [
   ...hbRaces.value.map((r) => ({ id: r.id, name: r.name, source: "Homebrew", sourceType: "homebrew" as const })),
@@ -149,21 +136,19 @@ const raceOptions = computed(() => [
     .map((r) => ({ id: r.id, name: r.name, source: r.source, sourceType: r.sourceType })),
 ]);
 
-const selectedClass = computed(() => classes.value.find((item) => item.id === draft.classId));
-const selectedSubclass = computed(() => subclasses.value.find((item) => item.id === draft.subclassId));
+const primaryClass = computed(() =>
+  classes.value.find((c) => c.id === draft.classes[0]?.classId),
+);
 
-const subclassOptions = computed(() => {
-  if (!selectedClass.value) return [];
-  return subclasses.value
-    .filter((item) => item.data.className === selectedClass.value?.name)
-    .filter((item) => item.data.classSource === selectedClass.value?.source)
-    .filter((item) => item.data.subclassFeatures.length > 0)
-    .sort((a, b) => a.name.localeCompare(b.name) || a.source.localeCompare(b.source));
-});
+const resolvedEntries = computed(() =>
+  draft.classes.map((entry) => ({
+    entry,
+    cls: classes.value.find((c) => c.id === entry.classId),
+    sub: subclasses.value.find((s) => s.id === entry.subclassId),
+  })),
+);
 
 const selectedSpells = computed(() => spells.value.filter((spell) => draft.selectedSpellIds.includes(spell.id)));
-
-const additionalKeys = computed(() => subclassAdditionalSpellKeys(selectedSubclass.value, spells.value));
 
 const hbSpellsAsRules = computed(() =>
   hbSpells.value.map((s) => ({
@@ -182,12 +167,18 @@ const hbSpellsAsRules = computed(() =>
   })),
 );
 
-const availableSpells = computed(() => [
-  ...hbSpellsAsRules.value,
-  ...spells.value.filter((s) =>
-    spellMatchesClass(s, selectedClass.value?.name, selectedClass.value?.source, selectedSubclass.value, additionalKeys.value),
-  ),
-]);
+const availableSpells = computed(() => {
+  const matchOne = (s: RulesEntity<SpellData>) =>
+    resolvedEntries.value.some(({ cls, sub }) =>
+      cls && spellMatchesClass(
+        s, cls.name, cls.source, sub, subclassAdditionalSpellKeys(sub, spells.value),
+      ),
+    );
+  return [
+    ...hbSpellsAsRules.value,
+    ...spells.value.filter(matchOne),
+  ];
+});
 
 const visibleSpells = computed(() => {
   const search = spellSearch.value.trim().toLowerCase();
@@ -213,31 +204,26 @@ const toggleSpell = (spellId: string) => {
 
 const spellLevelLabel = (level: number) => (level === 0 ? "Cantrip" : `Level ${level}`);
 
-watch(selectedClass, (nextClass) => {
-  if (!nextClass) return;
-  draft.subclassId = "";
-  if (spells.value.length) {
-    draft.selectedSpellIds = draft.selectedSpellIds.filter((spellId) =>
-      availableSpells.value.some((spell) => spell.id === spellId),
-    );
-  }
-  const conMod = abilityModifier(draft.abilityScores.con);
-  const hitDie = nextClass.data.hitDie?.faces ?? 8;
-  const suggestedHp = Math.max(1, hitDie + conMod);
-  if (draft.maxHp === 8 && draft.currentHp === 8) {
-    draft.maxHp = suggestedHp;
-    draft.currentHp = suggestedHp;
-  }
-  const knownCantrips = cantripsKnownForLevel(nextClass, draft.level);
-  if (knownCantrips > 0 && spellLevelFilter.value === -1) spellLevelFilter.value = 0;
-});
-
-watch(selectedSubclass, () => {
-  if (!spells.value.length) return;
-  draft.selectedSpellIds = draft.selectedSpellIds.filter((spellId) =>
-    availableSpells.value.some((spell) => spell.id === spellId),
-  );
-});
+watch(
+  () => JSON.stringify(draft.classes),
+  () => {
+    if (spells.value.length) {
+      draft.selectedSpellIds = draft.selectedSpellIds.filter((spellId) =>
+        availableSpells.value.some((spell) => spell.id === spellId),
+      );
+    }
+    const primary = primaryClass.value;
+    if (primary) {
+      const conMod = abilityModifier(draft.abilityScores.con);
+      const hitDie = primary.data.hitDie?.faces ?? 8;
+      const suggestedHp = Math.max(1, hitDie + conMod);
+      if (draft.maxHp === 8 && draft.currentHp === 8) {
+        draft.maxHp = suggestedHp;
+        draft.currentHp = suggestedHp;
+      }
+    }
+  },
+);
 </script>
 
 <style scoped>
@@ -276,6 +262,8 @@ watch(selectedSubclass, () => {
 .spell-row span { display: grid; gap: 2px; }
 .spell-row small { color: var(--ink-faint); font-style: italic; font-size: 0.86rem; }
 .spell-count { margin: 14px 0 0; text-align: center; font-size: 0.92rem; }
+
+.classes-heading { margin-top: 18px; }
 
 @media (min-width: 760px) {
   .ability-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
