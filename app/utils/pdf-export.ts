@@ -23,6 +23,13 @@ export const exportCharacterPdf = async (
       // field absent or wrong type in this template version — skip
     }
   }
+
+  // Shrink the equipment box text so longer item lists stay within the field.
+  try {
+    form.getTextField("Equipment").setFontSize(6);
+  } catch {
+    // field absent in this template version — skip
+  }
   for (const [name, on] of Object.entries(checks)) {
     try {
       const box = form.getCheckBox(name);

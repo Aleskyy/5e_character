@@ -712,12 +712,18 @@ const exportPdf = async () => {
   if (!character.value || exporting.value) return;
   exporting.value = true;
   try {
+    const featureNames = [
+      ...raceFeatureNames.value.map((f) => f.name),
+      ...classFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
+      ...subclassFeatureGroups.value.flatMap((c) => c.groups.flatMap((g) => g.features.map((f) => f.name))),
+    ];
     await downloadCharacterPdf(character.value, {
       classes: classes.value,
       subclasses: subclasses.value,
       spells: spells.value,
       races: races.value,
       items: itemLib.value,
+      featureNames,
     });
   } catch (e) {
     await askConfirm({

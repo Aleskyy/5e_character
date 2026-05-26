@@ -16,6 +16,8 @@ export type PdfExportContext = {
   spells: RulesEntity<SpellData>[];
   races: RulesEntity<RaceData>[];
   items: CustomItem[];
+  /** Names of all available race + class + subclass features, for the Features & Traits box. */
+  featureNames?: string[];
 };
 
 export type PdfFieldValues = { text: Record<string, string>; checks: Record<string, boolean> };
@@ -105,6 +107,8 @@ export const buildFieldValues = (c: CharacterDraft, ctx: PdfExportContext): PdfF
     .map((it) => it.name)
     .join(", ");
   setT(SCALAR.equipment, equipment);
+
+  setT(SCALAR.featuresTraits, (ctx.featureNames ?? []).join("\n"));
 
   // --- Currency ---
   setT(SCALAR.cp, c.currency.cp || "");
